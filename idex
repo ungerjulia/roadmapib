@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Road Map — Independent Brazil</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f5f0;
+    --gray-100: #1a1a1a;
+    --gray-200: #2a2a2a;
+    --gray-300: #3a3a3a;
+    --gray-400: #666;
+    --gray-500: #999;
+    --accent: #e8ff47;
+    --accent2: #47c5ff;
+    --danger: #ff4747;
+    --success: #47ff9c;
+    --warn: #ffb347;
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ───── LOGIN ───── */
+  #loginScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--black);
+    position: relative;
+  }
+
+  #loginScreen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(232,255,71,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .login-box {
+    width: 420px;
+    padding: 52px 48px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 16px;
+    position: relative;
+  }
+
+  .login-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  .login-logo img {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+  }
+
+  .login-logo-text {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    line-height: 1.4;
+  }
+
+  .login-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--white);
+  }
+
+  .login-sub {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 36px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-bottom: 8px;
+  }
+
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--gray-200);
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .form-group select option { background: var(--gray-200); }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: var(--black);
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .login-error {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: rgba(255,71,71,0.12);
+    border: 1px solid rgba(255,71,71,0.3);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--danger);
+    display: none;
+  }
+
+  /* ───── APP ───── */
+  #app { display: none; }
+
+  /* Sidebar */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    width: 240px;
+    background: var(--gray-100);
+    border-right: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    padding: 28px 20px;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 10;
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .sidebar-logo img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+  }
+
+  .sidebar-logo-text {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    line-height: 1.5;
+  }
+
+  .sidebar-section {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  .sidebar-section:first-of-type { margin-top: 0; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-500);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    background: var(--gray-200);
+    color: var(--white);
+  }
+
+  .nav-item.active { color: var(--accent); }
+
+  .nav-item .icon { font-size: 15px; }
+
+  .sidebar-bottom {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .user-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--gray-200);
+  }
+
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--black);
+    flex-shrink: 0;
+  }
+
+  .user-info { flex: 1; min-width: 0; }
+  .user-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-role { font-size: 10px; color: var(--gray-500); }
+
+  .btn-logout {
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 2px;
+    transition: color 0.15s;
+  }
+  .btn-logout:hover { color: var(--danger); }
+
+  /* Main */
+  .main {
+    flex: 1;
+    margin-left: 240px;
+    padding: 36px 40px;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 6px;
+  }
+
+  .btn-add {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    background: var(--accent);
+    color: var(--black);
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .btn-add:hover { opacity: 0.85; }
+
+  /* KPI Cards */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+
+  .kpi-card {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--c, var(--gray-300));
+  }
+
+  .kpi-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-bottom: 10px;
+  }
+
+  .kpi-value {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  /* Filters */
+  .filters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-select {
+    padding: 8px 14px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .filter-select:focus { border-color: var(--accent); }
+
+  .search-input {
+    padding: 8px 14px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 13px;
+    outline: none;
+    width: 220px;
+  }
+
+  .search-input:focus { border-color: var(--accent); }
+
+  /* Table */
+  .table-wrap {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead tr {
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  thead th {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--gray-200);
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--gray-200); }
+
+  td {
+    padding: 14px 18px;
+    color: var(--white);
+    vertical-align: middle;
+  }
+
+  .td-name { font-weight: 600; font-size: 14px; }
+
+  /* Badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .badge-status-backlog    { background: rgba(153,153,153,0.15); color: #999; }
+  .badge-status-planning   { background: rgba(71,197,255,0.15); color: var(--accent2); }
+  .badge-status-running    { background: rgba(232,255,71,0.15); color: var(--accent); }
+  .badge-status-done       { background: rgba(71,255,156,0.15); color: var(--success); }
+  .badge-status-paused     { background: rgba(255,179,71,0.15); color: var(--warn); }
+
+  .badge-prio-critical { background: rgba(255,71,71,0.15); color: var(--danger); }
+  .badge-prio-high     { background: rgba(255,179,71,0.15); color: var(--warn); }
+  .badge-prio-medium   { background: rgba(71,197,255,0.15); color: var(--accent2); }
+  .badge-prio-low      { background: rgba(153,153,153,0.15); color: #999; }
+
+  .badge-type { background: var(--gray-200); color: var(--gray-500); border: 1px solid var(--gray-300); }
+
+  /* Actions */
+  .row-actions {
+    display: flex;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  tbody tr:hover .row-actions { opacity: 1; }
+
+  .btn-icon {
+    background: var(--gray-200);
+    border: 1px solid var(--gray-300);
+    color: var(--white);
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .btn-icon:hover { background: var(--gray-300); }
+  .btn-icon.danger:hover { background: rgba(255,71,71,0.2); border-color: var(--danger); color: var(--danger); }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 40px 44px;
+    animation: fadeUp 0.25s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  .modal-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .btn-close {
+    background: var(--gray-200);
+    border: none;
+    color: var(--gray-500);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .btn-close:hover { background: var(--gray-300); color: var(--white); }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-row .full { grid-column: 1 / -1; }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .btn-secondary {
+    padding: 11px 22px;
+    background: var(--gray-200);
+    border: 1px solid var(--gray-300);
+    color: var(--white);
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .btn-secondary:hover { background: var(--gray-300); }
+
+  .btn-save {
+    padding: 11px 28px;
+    background: var(--accent);
+    border: none;
+    color: var(--black);
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .btn-save:hover { opacity: 0.85; }
+
+  /* Detail modal */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .detail-item { display: flex; flex-direction: column; gap: 5px; }
+  .detail-item.full { grid-column: 1 / -1; }
+  .detail-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-500); }
+  .detail-value { font-size: 14px; color: var(--white); line-height: 1.5; }
+
+  /* Empty */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .empty-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--gray-500); }
+  .empty-sub { font-size: 13px; color: var(--gray-400); margin-top: 6px; }
+
+  /* Loading */
+  .spinner {
+    width: 20px; height: 20px;
+    border: 2px solid var(--gray-300);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 40px auto;
+    display: block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 12px 20px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+    z-index: 9999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-color: var(--success); color: var(--success); }
+  .toast.error { border-color: var(--danger); color: var(--danger); }
+
+  .loading-overlay {
+    position: fixed; inset: 0;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 200;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .loading-overlay .spinner { margin: 0; }
+  .loading-overlay p { font-size: 13px; color: var(--gray-500); }
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div class="loading-overlay" id="loadingOverlay">
+  <span class="spinner"></span>
+  <p>Conectando ao banco de dados…</p>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════ LOGIN ══════════ -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="Logotipo_IB_8__2_.png" alt="IB" onerror="this.style.display='none'" />
+      <div class="login-logo-text">Independent Brazil<br>Inteligência & Projetos</div>
+    </div>
+    <div class="login-title">Bem-vindo</div>
+    <div class="login-sub">Faça login para acessar o Road Map</div>
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" id="loginEmail" placeholder="seu@email.com" />
+    </div>
+    <div class="form-group">
+      <label>Senha</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" />
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Entrar</button>
+    <div class="login-error" id="loginError">E-mail ou senha incorretos.</div>
+  </div>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div id="app">
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="Logotipo_IB_8__2_.png" alt="IB" onerror="this.style.display='none'" style="width:40px;height:40px;border-radius:8px;" />
+        <div class="sidebar-logo-text">IB Road Map<br>Projetos</div>
+      </div>
+
+      <div class="sidebar-section">Menu</div>
+      <button class="nav-item active" onclick="showView('dashboard')">
+        <span class="icon">⬛</span> Dashboard
+      </button>
+      <button class="nav-item" onclick="showView('table')">
+        <span class="icon">☰</span> Todos os Projetos
+      </button>
+
+      <div class="sidebar-section">Filtros rápidos</div>
+      <button class="nav-item" onclick="quickFilter('Backlog')"><span class="icon">·</span> Backlog</button>
+      <button class="nav-item" onclick="quickFilter('Em Planejamento')"><span class="icon">·</span> Planejamento</button>
+      <button class="nav-item" onclick="quickFilter('Em Execução')"><span class="icon">·</span> Em Execução</button>
+      <button class="nav-item" onclick="quickFilter('Concluído')"><span class="icon">·</span> Concluídos</button>
+      <button class="nav-item" onclick="quickFilter('Pausado')"><span class="icon">·</span> Pausados</button>
+
+      <div class="sidebar-bottom">
+        <div class="user-pill">
+          <div class="user-avatar" id="sidebarAvatar">J</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarName">Júlia</div>
+            <div class="user-role" id="sidebarRole">Admin</div>
+          </div>
+          <button class="btn-logout" onclick="doLogout()" title="Sair">↪</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main" id="mainContent">
+      <!-- será preenchido por JS -->
+    </main>
+  </div>
+</div>
+
+<!-- ══════════ MODAL FORM ══════════ -->
+<div class="modal-overlay" id="modalForm">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalFormTitle">Novo Projeto</div>
+      <button class="btn-close" onclick="closeModal('modalForm')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group full">
+        <label>Nome do Projeto *</label>
+        <input type="text" id="fName" placeholder="Ex.: Sistema de automação fiscal" />
+      </div>
+      <div class="form-group">
+        <label>Tipo *</label>
+        <select id="fType">
+          <option value="">Selecione</option>
+          <option>Software</option>
+          <option>Automação</option>
+          <option>Melhoria de Processo</option>
+          <option>App Web</option>
+          <option>Criação de Agente</option>
+          <option>Refatoração</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Etapa</label>
+        <select id="fStatus">
+          <option value="Backlog">Backlog</option>
+          <option value="Em Planejamento">Em Planejamento</option>
+          <option value="Em Execução">Em Execução</option>
+          <option value="Concluído">Concluído</option>
+          <option value="Pausado">Pausado</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Data aprox. de início</label>
+        <input type="date" id="fStart" />
+      </div>
+      <div class="form-group">
+        <label>Data aprox. de entrega</label>
+        <input type="date" id="fEnd" />
+      </div>
+      <div class="form-group">
+        <label>Nível de prioridade</label>
+        <select id="fPriority">
+          <option value="">Selecione</option>
+          <option value="Crítico">🔴 Crítico</option>
+          <option value="Alto">🟠 Alto</option>
+          <option value="Médio">🔵 Médio</option>
+          <option value="Baixo">⚫ Baixo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Solicitado por</label>
+        <input type="text" id="fRequester" placeholder="Nome do colaborador" />
+      </div>
+      <div class="form-group full">
+        <label>Descrição</label>
+        <textarea id="fDesc" placeholder="Descreva o projeto brevemente…"></textarea>
+      </div>
+      <div class="form-group full">
+        <label>Impacto Esperado</label>
+        <textarea id="fImpact" placeholder="Como isso vai agregar valor à empresa?" style="min-height:70px;"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('modalForm')">Cancelar</button>
+      <button class="btn-save" onclick="saveProject()">Salvar Projeto</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detalhe -->
+<div class="modal-overlay" id="modalDetail">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="detailTitle">Detalhes</div>
+      <button class="btn-close" onclick="closeModal('modalDetail')">✕</button>
+    </div>
+    <div class="detail-grid" id="detailBody"></div>
+  </div>
+</div>
+
+<!-- Modal Confirmar Delete -->
+<div class="modal-overlay" id="modalDelete">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <div class="modal-title">Excluir Projeto</div>
+      <button class="btn-close" onclick="closeModal('modalDelete')">✕</button>
+    </div>
+    <p style="color:var(--gray-500);font-size:14px;line-height:1.6;">Tem certeza que deseja excluir o projeto <strong id="deleteProjectName" style="color:var(--white)"></strong>? Esta ação não pode ser desfeita.</p>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('modalDelete')">Cancelar</button>
+      <button class="btn-save" style="background:var(--danger);" onclick="confirmDelete()">Sim, excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase + App JS -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import {
+  getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import {
+  getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+// ─── CONFIG FIREBASE ───────────────────────────────────────────────────────
+// ⚠️  Substitua pelos dados do SEU projeto Firebase antes de publicar!
+const firebaseConfig = {
+  apiKey: "AIzaSyBCw6pEgnGylNXKzYsXxU58yRAgRnMWqVM",
+  authDomain: "road-map-ib.firebaseapp.com",
+  projectId: "road-map-ib",
+  storageBucket: "road-map-ib.firebasestorage.app",
+  messagingSenderId: "1093393711787",
+  appId: "1:1093393711787:web:c0119f04e9ba4e171d2dee"
+};
+// ───────────────────────────────────────────────────────────────────────────
+
+const fbApp = initializeApp(firebaseConfig);
+const auth  = getAuth(fbApp);
+const db    = getFirestore(fbApp);
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+let currentUser = null;
+let isAdmin = false;
+let projects = [];
+let editingId = null;
+let deleteId = null;
+let activeView = 'dashboard';
+let filterStatus = null;
+
+// ─── AUTH ──────────────────────────────────────────────────────────────────
+window.doLogin = async () => {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPassword').value;
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    document.getElementById('loginError').style.display = 'none';
+  } catch {
+    document.getElementById('loginError').style.display = 'block';
+  }
+};
+
+window.doLogout = async () => {
+  await signOut(auth);
+};
+
+onAuthStateChanged(auth, async user => {
+  document.getElementById('loadingOverlay').style.display = 'none';
+  if (user) {
+    currentUser = user;
+    isAdmin = user.email === 'julia@independentbrazil.com';
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    const name = isAdmin ? 'Júlia' : 'Lincon';
+    document.getElementById('sidebarAvatar').textContent = name[0];
+    document.getElementById('sidebarName').textContent = name;
+    document.getElementById('sidebarRole').textContent = isAdmin ? 'Administrador' : 'Visualizador';
+    await loadProjects();
+    renderView();
+  } else {
+    currentUser = null;
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+  }
+});
+
+// ─── FIRESTORE ─────────────────────────────────────────────────────────────
+async function loadProjects() {
+  const q = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
+  const snap = await getDocs(q);
+  projects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+window.saveProject = async () => {
+  const name = document.getElementById('fName').value.trim();
+  const type = document.getElementById('fType').value;
+  if (!name || !type) { showToast('Preencha os campos obrigatórios.', 'error'); return; }
+
+  const data = {
+    name,
+    type,
+    status:    document.getElementById('fStatus').value,
+    startDate: document.getElementById('fStart').value,
+    endDate:   document.getElementById('fEnd').value,
+    priority:  document.getElementById('fPriority').value,
+    requester: document.getElementById('fRequester').value.trim(),
+    description: document.getElementById('fDesc').value.trim(),
+    impact:    document.getElementById('fImpact').value.trim(),
+    updatedAt: serverTimestamp()
+  };
+
+  try {
+    if (editingId) {
+      await updateDoc(doc(db, 'projects', editingId), data);
+      showToast('Projeto atualizado!', 'success');
+    } else {
+      data.createdAt = serverTimestamp();
+      await addDoc(collection(db, 'projects'), data);
+      showToast('Projeto criado!', 'success');
+    }
+    closeModal('modalForm');
+    await loadProjects();
+    renderView();
+  } catch (e) {
+    showToast('Erro ao salvar: ' + e.message, 'error');
+  }
+};
+
+window.confirmDelete = async () => {
+  try {
+    await deleteDoc(doc(db, 'projects', deleteId));
+    showToast('Projeto excluído.', 'success');
+    closeModal('modalDelete');
+    await loadProjects();
+    renderView();
+  } catch (e) {
+    showToast('Erro: ' + e.message, 'error');
+  }
+};
+
+// ─── VIEWS ─────────────────────────────────────────────────────────────────
+window.showView = (v) => {
+  activeView = v;
+  filterStatus = null;
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  renderView();
+};
+
+window.quickFilter = (status) => {
+  activeView = 'table';
+  filterStatus = status;
+  renderView();
+};
+
+function renderView() {
+  const mc = document.getElementById('mainContent');
+  if (activeView === 'dashboard') {
+    mc.innerHTML = buildDashboard();
+  } else {
+    mc.innerHTML = buildTable();
+  }
+}
+
+function buildDashboard() {
+  const total = projects.length;
+  const done  = projects.filter(p => p.status === 'Concluído').length;
+  const run   = projects.filter(p => p.status === 'Em Execução').length;
+  const back  = projects.filter(p => p.status === 'Backlog').length;
+  const pause = projects.filter(p => p.status === 'Pausado').length;
+
+  const kpis = [
+    { label: 'Total', value: total, color: 'var(--accent)' },
+    { label: 'Em Execução', value: run, color: 'var(--accent)' },
+    { label: 'Concluídos', value: done, color: 'var(--success)' },
+    { label: 'Backlog', value: back, color: 'var(--gray-400)' },
+    { label: 'Pausados', value: pause, color: 'var(--warn)' }
+  ];
+
+  const kpiHtml = kpis.map(k => `
+    <div class="kpi-card" style="--c:${k.color}">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.value}</div>
+    </div>
+  `).join('');
+
+  // Recent projects (last 5)
+  const recent = [...projects].slice(0, 8);
+
+  return `
+    <div class="page-header">
+      <div>
+        <div class="page-title">Road Map</div>
+        <div class="page-subtitle">Inteligência & Projetos — Independent Brazil</div>
+      </div>
+      ${isAdmin ? `<button class="btn-add" onclick="openNew()">+ Novo Projeto</button>` : ''}
+    </div>
+    <div class="kpi-grid">${kpiHtml}</div>
+    <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-family:var(--font-display);font-size:16px;font-weight:700;">Projetos Recentes</div>
+      <button class="btn-secondary" style="font-size:12px;padding:7px 14px;" onclick="showView('table')">Ver todos →</button>
+    </div>
+    <div class="table-wrap">${buildTableBody(recent)}</div>
+  `;
+}
+
+function buildTable() {
+  const fp = filterStatus ? projects.filter(p => p.status === filterStatus) : projects;
+
+  return `
+    <div class="page-header">
+      <div>
+        <div class="page-title">${filterStatus || 'Todos os Projetos'}</div>
+        <div class="page-subtitle">${fp.length} projeto${fp.length !== 1 ? 's' : ''} encontrado${fp.length !== 1 ? 's' : ''}</div>
+      </div>
+      ${isAdmin ? `<button class="btn-add" onclick="openNew()">+ Novo Projeto</button>` : ''}
+    </div>
+    <div class="filters">
+      <input class="search-input" id="searchBox" placeholder="🔍 Buscar projeto…" oninput="applySearch()" />
+      <select class="filter-select" id="filterType" onchange="applySearch()">
+        <option value="">Todos os tipos</option>
+        <option>Software</option><option>Automação</option><option>Melhoria de Processo</option>
+        <option>App Web</option><option>Criação de Agente</option><option>Refatoração</option>
+      </select>
+      <select class="filter-select" id="filterPrio" onchange="applySearch()">
+        <option value="">Todas as prioridades</option>
+        <option>Crítico</option><option>Alto</option><option>Médio</option><option>Baixo</option>
+      </select>
+    </div>
+    <div class="table-wrap" id="tableWrap">${buildTableBody(fp)}</div>
+  `;
+}
+
+window.applySearch = () => {
+  const q    = (document.getElementById('searchBox')?.value || '').toLowerCase();
+  const type = document.getElementById('filterType')?.value || '';
+  const prio = document.getElementById('filterPrio')?.value || '';
+  let fp = filterStatus ? projects.filter(p => p.status === filterStatus) : projects;
+  if (q) fp = fp.filter(p => p.name.toLowerCase().includes(q) || (p.description||'').toLowerCase().includes(q));
+  if (type) fp = fp.filter(p => p.type === type);
+  if (prio) fp = fp.filter(p => p.priority === prio);
+  document.getElementById('tableWrap').innerHTML = buildTableBody(fp);
+};
+
+function buildTableBody(list) {
+  if (!list.length) return `
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <div class="empty-title">Nenhum projeto encontrado</div>
+      <div class="empty-sub">Adicione seu primeiro projeto clicando em "+ Novo Projeto"</div>
+    </div>`;
+
+  const rows = list.map(p => `
+    <tr onclick="openDetail('${p.id}')">
+      <td class="td-name">${esc(p.name)}</td>
+      <td><span class="badge badge-type">${esc(p.type||'—')}</span></td>
+      <td>${statusBadge(p.status)}</td>
+      <td>${prioBadge(p.priority)}</td>
+      <td style="color:var(--gray-500)">${fmtDate(p.startDate)}</td>
+      <td style="color:var(--gray-500)">${fmtDate(p.endDate)}</td>
+      <td style="color:var(--gray-500)">${esc(p.requester||'—')}</td>
+      <td onclick="event.stopPropagation()">
+        ${isAdmin ? `
+        <div class="row-actions">
+          <button class="btn-icon" onclick="openEdit('${p.id}')" title="Editar">✏️</button>
+          <button class="btn-icon danger" onclick="openDelete('${p.id}','${esc(p.name)}')" title="Excluir">🗑</button>
+        </div>` : ''}
+      </td>
+    </tr>
+  `).join('');
+
+  return `
+    <table>
+      <thead>
+        <tr>
+          <th>Projeto</th>
+          <th>Tipo</th>
+          <th>Etapa</th>
+          <th>Prioridade</th>
+          <th>Início</th>
+          <th>Entrega</th>
+          <th>Solicitado por</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+// ─── MODAIS ────────────────────────────────────────────────────────────────
+window.openNew = () => {
+  editingId = null;
+  document.getElementById('modalFormTitle').textContent = 'Novo Projeto';
+  ['fName','fStart','fEnd','fRequester','fDesc','fImpact'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fType').value = '';
+  document.getElementById('fStatus').value = 'Backlog';
+  document.getElementById('fPriority').value = '';
+  openModal('modalForm');
+};
+
+window.openEdit = (id) => {
+  const p = projects.find(x => x.id === id);
+  if (!p) return;
+  editingId = id;
+  document.getElementById('modalFormTitle').textContent = 'Editar Projeto';
+  document.getElementById('fName').value = p.name || '';
+  document.getElementById('fType').value = p.type || '';
+  document.getElementById('fStatus').value = p.status || 'Backlog';
+  document.getElementById('fStart').value = p.startDate || '';
+  document.getElementById('fEnd').value = p.endDate || '';
+  document.getElementById('fPriority').value = p.priority || '';
+  document.getElementById('fRequester').value = p.requester || '';
+  document.getElementById('fDesc').value = p.description || '';
+  document.getElementById('fImpact').value = p.impact || '';
+  openModal('modalForm');
+};
+
+window.openDelete = (id, name) => {
+  deleteId = id;
+  document.getElementById('deleteProjectName').textContent = name;
+  openModal('modalDelete');
+};
+
+window.openDetail = (id) => {
+  const p = projects.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('detailTitle').textContent = p.name;
+  document.getElementById('detailBody').innerHTML = `
+    <div class="detail-item"><span class="detail-label">Tipo</span><span class="detail-value">${esc(p.type||'—')}</span></div>
+    <div class="detail-item"><span class="detail-label">Etapa</span><span class="detail-value">${statusBadge(p.status)}</span></div>
+    <div class="detail-item"><span class="detail-label">Prioridade</span><span class="detail-value">${prioBadge(p.priority)}</span></div>
+    <div class="detail-item"><span class="detail-label">Solicitado por</span><span class="detail-value">${esc(p.requester||'—')}</span></div>
+    <div class="detail-item"><span class="detail-label">Início previsto</span><span class="detail-value">${fmtDate(p.startDate)}</span></div>
+    <div class="detail-item"><span class="detail-label">Entrega prevista</span><span class="detail-value">${fmtDate(p.endDate)}</span></div>
+    <div class="detail-item full"><span class="detail-label">Descrição</span><span class="detail-value">${esc(p.description||'—')}</span></div>
+    <div class="detail-item full"><span class="detail-label">Impacto Esperado</span><span class="detail-value">${esc(p.impact||'—')}</span></div>
+  `;
+  openModal('modalDetail');
+};
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+window.closeModal = (id) => { document.getElementById(id).classList.remove('open'); };
+
+// ─── HELPERS ───────────────────────────────────────────────────────────────
+function statusBadge(s) {
+  const map = {
+    'Backlog': 'backlog', 'Em Planejamento': 'planning',
+    'Em Execução': 'running', 'Concluído': 'done', 'Pausado': 'paused'
+  };
+  return `<span class="badge badge-status-${map[s]||'backlog'}">${s||'Backlog'}</span>`;
+}
+
+function prioBadge(p) {
+  const map = { 'Crítico':'critical','Alto':'high','Médio':'medium','Baixo':'low' };
+  if (!p) return `<span class="badge badge-prio-low">—</span>`;
+  return `<span class="badge badge-prio-${map[p]||'low'}">${p}</span>`;
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y,m,day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+
+function esc(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+// Enter to login
+document.getElementById('loginPassword').addEventListener('keydown', e => {
+  if (e.key === 'Enter') window.doLogin();
+});
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => {
+    if (e.target === el) el.classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
