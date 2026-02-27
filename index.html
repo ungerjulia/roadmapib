@@ -939,9 +939,15 @@ onAuthStateChanged(auth, async user => {
 
 // ─── FIRESTORE ─────────────────────────────────────────────────────────────
 async function loadProjects() {
-  const q = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
-  const snap = await getDocs(q);
-  projects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  try {
+    const q = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    projects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch {
+    // fallback sem ordenação se índice ainda não existir
+    const snap = await getDocs(collection(db, 'projects'));
+    projects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
 }
 
 window.saveProject = async () => {
