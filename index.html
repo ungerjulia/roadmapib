@@ -741,7 +741,7 @@
 <!-- Loading -->
 <div class="loading-overlay" id="loadingOverlay">
   <span class="spinner"></span>
-  <p>Conectando ao banco de dados…</p>
+  <p id="loadingMsg">Conectando ao banco de dados…</p>
 </div>
 
 <!-- Toast -->
@@ -970,7 +970,20 @@ window.doLogout = async () => {
   await signOut(auth);
 };
 
+// Safety timeout: if Firebase doesn't respond in 8s, show login anyway
+const loadingTimeout = setTimeout(() => {
+  const overlay = document.getElementById('loadingOverlay');
+  if (overlay && overlay.style.display !== 'none') {
+    document.getElementById('loadingMsg').textContent = 'Tempo esgotado. Verifique sua conexão.';
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'flex';
+    }, 2000);
+  }
+}, 8000);
+
 onAuthStateChanged(auth, async user => {
+  clearTimeout(loadingTimeout);
   document.getElementById('loadingOverlay').style.display = 'none';
   if (user) {
     currentUser = user;
