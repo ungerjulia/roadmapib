@@ -303,12 +303,12 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 32px;
+    margin-bottom: 22px;
   }
 
   .page-title {
     font-family: var(--font-display);
-    font-size: 32px;
+    font-size: 24px;
     font-weight: 800;
     line-height: 1;
   }
@@ -341,15 +341,15 @@
   .kpi-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 14px;
-    margin-bottom: 32px;
+    gap: 12px;
+    margin-bottom: 28px;
   }
 
   .kpi-card {
     background: var(--gray-100);
     border: 1px solid var(--gray-200);
-    border-radius: 12px;
-    padding: 20px 22px;
+    border-radius: 10px;
+    padding: 16px 18px;
     position: relative;
     overflow: hidden;
   }
@@ -365,20 +365,20 @@
   .kpi-label {
     font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.10em;
     text-transform: uppercase;
     color: var(--gray-500);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
 
   .kpi-value {
     font-family: var(--font-display);
-    font-size: 40px;
+    font-size: 28px;
     font-weight: 800;
     color: var(--white);
     line-height: 1;
     font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
   }
 
   /* Filters */
@@ -424,6 +424,48 @@
     border: 1px solid var(--gray-200);
     border-radius: 14px;
     overflow: hidden;
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #6ea8fe;
+    font-size: 12px;
+    text-decoration: none;
+    padding: 3px 8px;
+    border-radius: 5px;
+    border: 1px solid rgba(110,168,254,0.3);
+    transition: all 0.15s;
+  }
+  .project-link:hover { background: rgba(110,168,254,0.1); }
+
+  .screenshot-thumb {
+    width: 80px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--gray-300);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .screenshot-thumb:hover { transform: scale(1.05); }
+
+  .screenshot-preview {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    cursor: pointer;
+  }
+  .screenshot-preview img {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: 10px;
+    border: 1px solid var(--gray-300);
   }
 
   table {
@@ -835,6 +877,14 @@
         <label>Impacto Esperado</label>
         <textarea id="fImpact" placeholder="Como isso vai agregar valor à empresa?" style="min-height:70px;"></textarea>
       </div>
+      <div class="form-group">
+        <label>🔗 Link do App / Repositório</label>
+        <input type="url" id="fLink" placeholder="https://..." />
+      </div>
+      <div class="form-group">
+        <label>🖼️ Print / Screenshot (URL da imagem)</label>
+        <input type="url" id="fScreenshot" placeholder="https://... ou cole link de imagem" />
+      </div>
     </div>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="closeModal('modalForm')">Cancelar</button>
@@ -968,6 +1018,8 @@ window.saveProject = async () => {
     requester: document.getElementById('fRequester').value.trim(),
     description: document.getElementById('fDesc').value.trim(),
     impact:    document.getElementById('fImpact').value.trim(),
+    link:      document.getElementById('fLink').value.trim(),
+    screenshot: document.getElementById('fScreenshot').value.trim(),
     updatedAt: serverTimestamp()
   };
 
@@ -1120,6 +1172,10 @@ function buildTableBody(list) {
       <td style="color:var(--gray-500)">${fmtDate(p.startDate)}</td>
       <td style="color:var(--gray-500)">${fmtDate(p.endDate)}</td>
       <td style="color:var(--gray-500)">${esc(p.requester||'—')}</td>
+      <td onclick="event.stopPropagation()" style="white-space:nowrap;">
+        ${p.link ? `<a href="${p.link}" target="_blank" class="project-link">↗ Link</a>` : ''}
+        ${p.screenshot ? `<img src="${p.screenshot}" class="screenshot-thumb" onclick="showPreview('${p.screenshot}')" title="Ver screenshot" />` : ''}
+      </td>
       <td onclick="event.stopPropagation()">
         ${isAdmin ? `
         <div class="row-actions">
@@ -1141,6 +1197,7 @@ function buildTableBody(list) {
           <th>Início</th>
           <th>Entrega</th>
           <th>Solicitado por</th>
+          <th>Links</th>
           <th></th>
         </tr>
       </thead>
@@ -1152,7 +1209,7 @@ function buildTableBody(list) {
 window.openNew = () => {
   editingId = null;
   document.getElementById('modalFormTitle').textContent = 'Novo Projeto';
-  ['fName','fStart','fEnd','fRequester','fDesc','fImpact'].forEach(id => document.getElementById(id).value = '');
+  ['fName','fStart','fEnd','fRequester','fDesc','fImpact','fLink','fScreenshot'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('fType').value = '';
   document.getElementById('fStatus').value = 'Backlog';
   document.getElementById('fPriority').value = '';
@@ -1173,6 +1230,8 @@ window.openEdit = (id) => {
   document.getElementById('fRequester').value = p.requester || '';
   document.getElementById('fDesc').value = p.description || '';
   document.getElementById('fImpact').value = p.impact || '';
+  document.getElementById('fLink').value = p.link || '';
+  document.getElementById('fScreenshot').value = p.screenshot || '';
   openModal('modalForm');
 };
 
@@ -1195,7 +1254,9 @@ window.openDetail = (id) => {
     <div class="detail-item"><span class="detail-label">Entrega prevista</span><span class="detail-value">${fmtDate(p.endDate)}</span></div>
     <div class="detail-item full"><span class="detail-label">Descrição</span><span class="detail-value">${esc(p.description||'—')}</span></div>
     <div class="detail-item full"><span class="detail-label">Impacto Esperado</span><span class="detail-value">${esc(p.impact||'—')}</span></div>
-  `;
+    ${p.link ? `<div class="detail-item"><span class="detail-label">🔗 Link do App</span><span class="detail-value"><a href="${p.link}" target="_blank" class="project-link">↗ Abrir projeto</a></span></div>` : ''}
+    ${p.screenshot ? `<div class="detail-item full"><span class="detail-label">🖼️ Screenshot</span><span class="detail-value" style="margin-top:6px;display:block;"><img src="${p.screenshot}" style="max-width:100%;max-height:300px;border-radius:8px;border:1px solid var(--gray-300);cursor:pointer;" onclick="showPreview('${p.screenshot}')" /></span></div>` : ''}
+  \`;
   openModal('modalDetail');
 };
 
@@ -1226,6 +1287,14 @@ function fmtDate(d) {
 function esc(str) {
   return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
+window.showPreview = (src) => {
+  const div = document.createElement('div');
+  div.className = 'screenshot-preview';
+  div.innerHTML = `<img src="${src}" />`;
+  div.onclick = () => div.remove();
+  document.body.appendChild(div);
+};
 
 function showToast(msg, type='') {
   const t = document.getElementById('toast');
