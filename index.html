@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Road Map — Independent Brazil</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family="Syne":wght@400;600;700;800&family=DM+"Sans":wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{
@@ -563,7 +563,7 @@ function bKPIs(){
     <div class="cc"><div class="ct">Data Estimada × Data Real</div><canvas id="cDates"></canvas></div>
     <div class="cc full">
       <div class="ct">Projetos Concluídos por Mês</div>
-      <div class="cf"><label style="font-size:11px;color:var(--g5);">Ano:</label>
+      <div class="cf"><label style="font-size:11px;color:var(--g5);">"Ano":</label>
         <select id="yrSel" onchange="updCC()">${getYrs()}</select></div>
       <canvas id="cConc"></canvas>
     </div>
@@ -587,15 +587,15 @@ function iCharts(){
   const clrs=["#6ea8fe","#2ecc71","#f1c40f","#e67e22","#c8102e","#9b59b6","#1abc9c","#e74c3c","#3498db","#f39c12","#8a90a0","#5a6075","#34495e"];
   charts.setor=new Chart(document.getElementById("cSetor"),{type:"doughnut",data:{labels:Object.keys(sc),datasets:[{data:Object.values(sc),backgroundColor:clrs,borderWidth:0}]},options:{...cd,cutout:"58%"}});
   // Prio
-  const pm={Critico:0,Alto:0,Medio:0,Baixo:0,nd:0};
+  const pm={"Critico":0,"Alto":0,"Medio":0,"Baixo":0,nd:0};
   projects.forEach(p=>{const k=p.priority||"nd";if(pm[k]!==undefined)pm[k]++;});
   charts.prio=new Chart(document.getElementById("cPrio"),{type:"bar",data:{labels:["Crítico","Alto","Médio","Baixo","N/D"],datasets:[{data:[pm.Critico,pm.Alto,pm.Medio,pm.Baixo,pm.nd],backgroundColor:["#c8102e","#e67e22","#6ea8fe","#8a90a0","#5a6075"],borderRadius:5,borderWidth:0}]},options:{...cd,plugins:{legend:{display:false}},scales:{x:{ticks:{color:"#8a90a0"},grid:{color:"rgba(255,255,255,.04)"}},y:{ticks:{color:"#8a90a0",stepSize:1},grid:{color:"rgba(255,255,255,.04)"}}}}});
   // Status
-  const sm={Backlog:0,"Em Planejamento":0,Em Execucao:0,Concluido:0,Pausado:0};
+  const sm={"Backlog":0,"Em Planejamento":0,"Em Execucao":0,"Concluido":0,"Pausado":0};
   projects.forEach(p=>{if(sm[p.status]!==undefined)sm[p.status]++;});
   charts.stat=new Chart(document.getElementById("cStat"),{type:"pie",data:{labels:["Backlog","Planejamento","Em Execução","Concluído","Pausado"],datasets:[{data:Object.values(sm),backgroundColor:["#ccc","#6ea8fe","#f1c40f","#2ecc71","#ff6b6b"],borderWidth:0}]},options:{...cd}});
   // Eisenhower
-  const em={Q1:0,Q2:0,Q3:0,Q4:0};
+  const em={"Q1":0,"Q2":0,"Q3":0,"Q4":0};
   projects.forEach(p=>{if(p.eis&&em[p.eis]!==undefined)em[p.eis]++;});
   charts.eis=new Chart(document.getElementById("cEis"),{type:"bar",data:{labels:["Q1 Urgente+Imp","Q2 Planejamento","Q3 Delegar","Q4 Eliminar"],datasets:[{data:Object.values(em),backgroundColor:["#ff6b6b","#f1c40f","#6ea8fe","#5a6075"],borderRadius:5,borderWidth:0}]},options:{...cd,plugins:{legend:{display:false}},scales:{x:{ticks:{color:"#8a90a0",font:{size:10}},grid:{display:false}},y:{ticks:{color:"#8a90a0",stepSize:1},grid:{color:"rgba(255,255,255,.04)"}}}}});
   // Dates
@@ -757,9 +757,9 @@ window.saveP=async()=>{
       const prev=projects.find(x=>x.id===editId)||{};
       // Auto-log the update
       const changes=[];
-      if(prev.status!==data.status)changes.push(`Status: ${prev.status||"—"} → ${data.status}`);
+      if(prev.status!==data.status)changes.push(`"Status": ${prev.status||"—"} → ${data.status}`);
       if(prev.resp!==data.resp)changes.push(`Responsável: ${prev.resp||"—"} → ${data.resp}`);
-      if(prev.eis!==data.eis)changes.push(`Eisenhower: ${prev.eis||"—"} → ${data.eis}`);
+      if(prev.eis!==data.eis)changes.push(`"Eisenhower": ${prev.eis||"—"} → ${data.eis}`);
       const logEntry={type:"update",author:uname,email:CU.email,text:changes.length?changes.join(" | "):"Projeto atualizado.",ts:new Date().toISOString()};
       data.timeline=arrayUnion(logEntry);
       await updateDoc(doc(db,"projects",editId),data);
