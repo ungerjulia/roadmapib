@@ -634,8 +634,7 @@ window.openEdit=id=>{
   editId=id;document.getElementById("mFT").textContent="Editar Projeto";
   document.getElementById("fNm").value=p.name||"";
   // Restore tipo checkboxes
-  setTipos(Array.isArray(p.tipos)?p.tipos:(p.type?p.type.split(", ").map(t=>t.trim()):[]));    cb.checked?cb.closest(".si").classList.add("chk"):cb.closest(".si").classList.remove("chk");
-  });
+  setTipos(Array.isArray(p.tipos)?p.tipos:(p.type?p.type.split(", ").map(t=>t.trim()):[]))
   document.getElementById("fSt").value=p.status||"Backlog";document.getElementById("fRp").value=p.resp||"";
   document.getElementById("fPr").value=p.priority||"";document.getElementById("fSd").value=p.startDate||"";
   document.getElementById("fEd").value=p.endDate||"";document.getElementById("fEr").value=p.endDateReal||"";
@@ -665,7 +664,7 @@ window.saveP=async()=>{
   const tp=tipos_arr.join(", ");
   const setores=[];document.querySelectorAll("#sGrid input:checked").forEach(cb=>setores.push(cb.value));
   const typesArr=[...document.querySelectorAll("#tGrid input:checked")].map(c=>c.value);
-  const data={name:nm,type:typesArr.join(", "),types:typesArr,status:document.getElementById("fSt").value,resp:document.getElementById("fRp").value,priority:document.getElementById("fPr").value,eis:document.getElementById("fEis").value||"",requester:document.getElementById("fRq").value.trim(),setores,link:document.getElementById("fLk").value.trim(),image:document.getElementById("fIm").value.trim(),description:document.getElementById("fDs").value.trim(),impact:document.getElementById("fIp").value.trim(),updatedAt:serverTimestamp()};
+  const data={name:nm,type:tp,tipos:tipos_arr,status:document.getElementById("fSt").value,resp:document.getElementById("fRp").value,priority:document.getElementById("fPr").value,eis:document.getElementById("fEis").value||"",requester:document.getElementById("fRq").value.trim(),setores,link:document.getElementById("fLk").value.trim(),image:document.getElementById("fIm").value.trim(),description:document.getElementById("fDs").value.trim(),impact:document.getElementById("fIp").value.trim(),updatedAt:serverTimestamp()};
   if(role==="admin"){data.startDate=document.getElementById("fSd").value;data.endDate=document.getElementById("fEd").value;data.endDateReal=document.getElementById("fEr").value;}
   try{
     if(editId){
