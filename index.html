@@ -514,6 +514,33 @@ import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https:
 import{getFirestore,collection,addDoc,getDocs,getDoc,updateDoc,deleteDoc,doc,query,orderBy,serverTimestamp,arrayUnion,onSnapshot}from"https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import{getStorage,ref,uploadBytesResumable,getDownloadURL}from"https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
 
+// ── HELPERS ──
+function sBadge(s){
+  const m={"Backlog":"bs-backlog","Em Planejamento":"bs-planning","Em Execucao":"bs-running","Concluido":"bs-done","Pausado":"bs-paused"};
+  const l={"Backlog":"Backlog","Em Planejamento":"Em Planejamento","Em Execucao":"Em Execução","Concluido":"Concluído","Pausado":"Pausado"};
+  return`<span class="badge ${m[s]||"bs-backlog"}">${l[s]||s||"Backlog"}</span>`;
+}
+function pBadge(p){
+  const m={"Critico":"bp-c","Alto":"bp-a","Medio":"bp-m","Baixo":"bp-b"};
+  const l={"Critico":"Crítico","Alto":"Alto","Medio":"Médio","Baixo":"Baixo"};
+  if(!p)return`<span class="badge bp-b">—</span>`;
+  return`<span class="badge ${m[p]||"bp-b"}">${l[p]||p}</span>`;
+}
+function fmtD(d){if(!d)return"—";const[y,m,dy]=d.split("-");return`${dy}/${m}/${y}`;}
+function fmtTs(ts){
+  try{const d=new Date(ts);return`${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;}
+  catch{return ts||"";}
+}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function toast(msg,type){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.className="toast "+(type||"")+" show";
+  setTimeout(()=>{t.className="toast";},3500);
+}
+function OM(id){document.getElementById(id).classList.add("open");}
+window.CM=id=>{document.getElementById(id).classList.remove("open");};
+
+
 const FC={apiKey:"AIzaSyBCw6pEgnGylNXKzYsXxU58yRAgRnMWqVM",authDomain:"road-map-ib.firebaseapp.com",projectId:"road-map-ib",storageBucket:"road-map-ib.firebasestorage.app",messagingSenderId:"1093393711787",appId:"1:1093393711787:web:c0119f04e9ba4e171d2dee"};
 const fb=initializeApp(FC),auth=getAuth(fb),db=getFirestore(fb),storage=getStorage(fb);
 
@@ -525,6 +552,10 @@ const EIS_L={"Q1":"Q1 — Urgente + Importante","Q2":"Q2 — Não Urgente + Impo
 const EIS_C={"Q1":"eq1","Q2":"eq2","Q3":"eq3","Q4":"eq4"};
 const TL_T={delivery:"📦 Entrega Parcial",block:"🚧 Impedimento",doc:"📄 Documentação",update:"✏️ Atualização",comment:"💬 Comentário",ceo_approval:"👍 Aprovação",ceo_suggestion:"💡 Sugestão",ceo_comment:"💬 Comentário CEO",reply:"↩️ Resposta ao CEO"};
 const TL_I={delivery:"📦",block:"🚧",doc:"📄",update:"✏️",comment:"💬",ceo_approval:"👍",ceo_suggestion:"💡",ceo_comment:"💬",reply:"↩️"};
+
+
+
+// ── HELPER FUNCTIONS (declared early) ──
 
 let CU=null,role="ceo",uname="",projects=[],editId=null,delId=null,studioId=null;
 let av="dash",fs=null,charts={},unsubNotif=null,notifications=[];
@@ -581,6 +612,9 @@ function startNotifListener(){
   unsubNotif=onSnapshot(q,snap=>{
     notifications=snap.docs.map(d=>({id:d.id,...d.data()})).filter(n=>n.to===CU.email);
     renderBell();
+  },err=>{
+    console.warn("Notifications listener error:", err.code);
+    // permission-denied: Firestore rules need update for notifications
   });
 }
 function renderBell(){
