@@ -1051,286 +1051,6 @@ function bTBody(list){
 // ══════════════════════════════
 function genToken(){ return [...Array(32)].map(()=>Math.random().toString(36)[2]||"a").join(""); }
 
-window.openShare=async(id)=>{
-  const p=projects.find(x=>x.id===id);if(!p)return;
-  document.getElementById("mShareTitle").textContent=`🔗 Link — ${p.name.slice(0,30)}`;
-  renderShareBody(p);
-  OM("mShare");
-};
-
-function renderShareBody(p){
-  const hasLink=p.shareToken&&p.shareActive;
-  const baseUrl=window.location.origin+window.location.pathname;
-  const link=hasLink?`${baseUrl}?update=${p.shareToken}`:"";
-  document.getElementById("shareBody").innerHTML=hasLink?`
-    <p style="font-size:13px;color:var(--g5);margin-bottom:12px;">Link ativo para <strong style="color:var(--wh)">${esc(p.name)}</strong>. Compartilhe com o solicitante:</p>
-    <div class="share-link-box">${link}</div>
-    <div style="display:flex;gap:8px;margin-bottom:16px;">
-      <button class="btn-copy" onclick="copyLink('${link}')">📋 Copiar link</button>
-      <button class="btn-revoke" onclick="revokeLink('${p.id}')">🚫 Cancelar link</button>
-    </div>
-    <div style="font-size:11px;color:var(--g5);padding:10px 12px;background:var(--g2);border-radius:8px;">
-      ℹ️ A senha definida foi enviada separadamente. Clique em "Cancelar link" para revogar o acesso imediatamente.
-    </div>
-  `:`
-    <p style="font-size:13px;color:var(--g5);margin-bottom:16px;">Gere um link protegido por senha para o solicitante acompanhar o projeto sem precisar de login.</p>
-    <div class="fg2">
-      <label>Senha de acesso</label>
-      <input type="text" id="sharePwd" placeholder="Ex: IB2025" style="width:100%;padding:10px 13px;background:var(--g2);border:1px solid var(--g3);border-radius:8px;color:var(--wh);font-family:var(--fb);font-size:14px;outline:none;margin-bottom:4px;"/>
-      <div style="font-size:11px;color:var(--g4);margin-top:4px;">Anote a senha — você precisará enviá-la ao solicitante separadamente.</div>
-    </div>
-    <div class="ma" style="margin-top:16px;padding-top:16px;">
-      <button class="bs2" onclick="CM('mShare')">Cancelar</button>
-      <button class="bsv" onclick="generateLink('${p.id}')">🔗 Gerar Link</button>
-    </div>
-  `;
-}
-
-window.generateLink=async(id)=>{
-  const pwd=document.getElementById("sharePwd")?.value.trim();
-  if(!pwd){toast("Digite uma senha.","err");return;}
-  const token=genToken();
-  // Store hashed-ish pwd (simple, not cryptographic — just to avoid plain text)
-  const pwdKey=btoa(pwd);
-  try{
-    await updateDoc(doc(db,"projects",id),{shareToken:token,sharePwd:pwdKey,shareActive:true,shareCreatedAt:new Date().toISOString(),shareCreatedBy:uname});
-    toast("Link gerado! ✓","ok");
-    await loadP();
-    const p=projects.find(x=>x.id===id);renderShareBody(p);
-  }catch(e){toast("Erro: "+e.message,"err");}
-};
-
-window.copyLink=async(link)=>{
-  try{await navigator.clipboard.writeText(link);toast("Link copiado! ✓","ok");}
-  catch{toast("Copie manualmente.","err");}
-};
-
-window.revokeLink=async(id)=>{
-  if(!confirm("Revogar o link? O solicitante perderá o acesso imediatamente."))return;
-  try{
-    await updateDoc(doc(db,"projects",id),{shareActive:false,shareToken:"",sharePwd:""});
-    toast("Link revogado.","ok");
-    await loadP();
-    const p=projects.find(x=>x.id===id);renderShareBody(p);
-  }catch(e){toast("Erro: "+e.message,"err");}
-};
-
-// ── PUBLIC VIEW (no login needed) ──
-async function checkPublicView(){
-  const params=new URLSearchParams(window.location.search);
-  const token=params.get("update");
-  if(!token)return false;
-  // Show public view, hide app/login
-  document.getElementById("ls").style.display="none";
-  document.getElementById("app").style.display="none";
-  document.getElementById("lov").style.display="none";
-  document.getElementById("publicView").style.display="block";
-  await renderPublicView(token);
-  return true;
-}
-
-async function renderPublicView(token){
-  const pv=document.getElementById("pvContent");
-  pv.innerHTML=`<div class="pv-pwd-box"><div style="font-size:32px;margin-bottom:10px;">🔒</div><h2>Acesso Protegido</h2><p>Digite a senha fornecida pela equipe de TI para visualizar o progresso do projeto.</p><input type="password" id="pvPwd" placeholder="••••••••" /><div class="pv-pwd-err" id="pvPwdErr">Senha incorreta. Tente novamente.</div><button class="bsv" style="width:100%;" onclick="pvLogin('${token}')">Acessar</button></div>`;
-  document.getElementById("pvPwd").addEventListener("keydown",e=>{if(e.key==="Enter")pvLogin(token);});
-}
-
-window.pvLogin=async(token)=>{
-  const pwd=document.getElementById("pvPwd")?.value.trim();
-  if(!pwd)return;
-  // Find project by token
-  try{
-    const snap=await getDocs(collection(db,"projects"));
-    const proj=snap.docs.map(d=>({id:d.id,...d.data()})).find(p=>p.shareToken===token&&p.shareActive);
-    if(!proj){document.getElementById("pvPwdErr").style.display="block";document.getElementById("pvPwdErr").textContent="Link inválido ou expirado.";return;}
-    if(atob(proj.sharePwd||"")!==pwd){document.getElementById("pvPwdErr").style.display="block";return;}
-    renderPublicProject(proj);
-  }catch(e){document.getElementById("pvPwdErr").style.display="block";document.getElementById("pvPwdErr").textContent="Erro ao acessar. Tente novamente.";}
-};
-
-function renderPublicProject(p){
-  // Filter timeline — show only: delivery, update, comment (hide: block/doc/ceo_*/reply)
-  const VISIBLE=["delivery","update","comment"];
-  const tl=[...(p.timeline||[])].filter(e=>VISIBLE.includes(e.type)).sort((a,b)=>b.ts.localeCompare(a.ts));
-  const statusColors={"Backlog":"#ccc","Em Planejamento":"#6ea8fe","Em Execucao":"#f1c40f","Concluido":"#2ecc71","Pausado":"#ff6b6b"};
-  const statusLabels={"Backlog":"Backlog","Em Planejamento":"Em Planejamento","Em Execucao":"Em Execução","Concluido":"Concluído","Pausado":"Pausado"};
-  const statusColor=statusColors[p.status]||"#8a90a0";
-  const tlHtml=tl.length===0
-    ?`<div style="text-align:center;padding:28px;color:var(--g5);font-size:13px;">Nenhuma atualização registrada ainda.</div>`
-    :tl.map(e=>`<div class="pv-tl-item">
-      <div class="pv-tl-icon">${{delivery:"📦",update:"✏️",comment:"💬"}[e.type]||"📝"}</div>
-      <div class="pv-tl-body">
-        <div class="pv-tl-meta"><strong>${esc(e.author)}</strong> · ${fmtTs(e.ts)}</div>
-        <div class="pv-tl-text">${esc(e.text)}</div>
-      </div></div>`).join("");
-  document.getElementById("pvContent").innerHTML=`
-    <div class="pv-header">
-      <div class="pv-company">Independent Brazil · Inteligência &amp; Projetos</div>
-      <div class="pv-title">${esc(p.name)}</div>
-      ${p.projectId?`<div class="pv-id">${p.projectId}</div>`:""}
-    </div>
-    <div class="pv-grid">
-      <div class="pv-card">
-        <div class="pv-card-label">Status</div>
-        <div class="pv-card-value" style="color:${statusColor};font-weight:700;">${statusLabels[p.status]||p.status||"—"}</div>
-      </div>
-      <div class="pv-card">
-        <div class="pv-card-label">Tipo</div>
-        <div class="pv-card-value">${esc(p.type||"—")}</div>
-      </div>
-      <div class="pv-card">
-        <div class="pv-card-label">Responsável</div>
-        <div class="pv-card-value">${esc(p.resp||"—")}</div>
-      </div>
-      <div class="pv-card">
-        <div class="pv-card-label">Data Estimada</div>
-        <div class="pv-card-value">${fmtD(p.endDate)}</div>
-      </div>
-      ${p.endDateReal?`<div class="pv-card" style="grid-column:1/-1;border-color:rgba(46,204,113,.3);">
-        <div class="pv-card-label" style="color:var(--grn);">✅ Data Real de Entrega</div>
-        <div class="pv-card-value" style="color:var(--grn);">${fmtD(p.endDateReal)}</div>
-      </div>`:""}
-      ${p.description?`<div class="pv-card" style="grid-column:1/-1;">
-        <div class="pv-card-label">Descrição</div>
-        <div class="pv-card-value" style="font-size:13px;line-height:1.6;">${esc(p.description)}</div>
-      </div>`:""}
-    </div>
-    <div class="pv-tl-title">📋 Atualizações do Projeto</div>
-    ${tlHtml}
-    <div class="pv-footer">
-      Este link foi gerado pela equipe de Inteligência &amp; Projetos — Independent Brazil.<br>
-      Para mais informações, entre em contato com projetos.inteligencia@independentbrazil.com
-    </div>`;
-}
-
-function OM(id){document.getElementById(id).classList.add("open");}
-window.CM=id=>{document.getElementById(id).classList.remove("open");};
-function sBadge(s){const m={"Backlog":"bs-backlog","Em Planejamento":"bs-planning","Em Execucao":"bs-running","Concluido":"bs-done","Pausado":"bs-paused"};const l={"Backlog":"Backlog","Em Planejamento":"Em Planejamento","Em Execucao":"Em Execução","Concluido":"Concluído","Pausado":"Pausado"};return`<span class="badge ${m[s]||"bs-backlog"}">${l[s]||s||"Backlog"}</span>`;}
-function pBadge(p){const m={"Critico":"bp-c","Alto":"bp-a","Medio":"bp-m","Baixo":"bp-b"};const l={"Critico":"Crítico","Alto":"Alto","Medio":"Médio","Baixo":"Baixo"};if(!p)return`<span class="badge bp-b">—</span>`;return`<span class="badge ${m[p]||"bp-b"}">${l[p]||p}</span>`;}
-function fmtD(d){if(!d)return"—";const[y,m,dy]=d.split("-");return`${dy}/${m}/${y}`;}
-function fmtTs(ts){try{const d=new Date(ts);return`${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;}catch{return ts||"";}}
-function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
-function toast(msg,type){const t=document.getElementById("toast");t.textContent=msg;t.className="toast "+(type||"")+" show";setTimeout(()=>{t.className="toast";},3500);}
-
-document.getElementById("lp").addEventListener("keydown",e=>{if(e.key==="Enter")window.doLogin();});
-document.querySelectorAll(".mo").forEach(el=>el.addEventListener("click",e=>{if(e.target===el)el.classList.remove("open");}));
-document.addEventListener("click",e=>{const p=document.getElementById("notifPanel"),b=document.getElementById("bellRow");if(p&&!p.contains(e.target)&&b&&!b.contains(e.target))p.classList.remove("open");});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){document.getElementById("lightbox").classList.remove("open");}});
-
-
-// ══════════════════════════════════
-// ── SHARE LINK SYSTEM ──
-// ══════════════════════════════════
-
-// Check if we're in public view mode
-const urlParams = new URLSearchParams(window.location.search);
-const pubToken = urlParams.get('view');
-
-if(pubToken){
-  // PUBLIC VIEW MODE
-  document.getElementById('lov').style.display='none';
-  document.getElementById('ls').style.display='none';
-  document.getElementById('app').style.display='none';
-  loadPublicView(pubToken);
-}
-
-async function loadPublicView(token){
-  const pwdScreen = document.getElementById('pubPwdScreen');
-  const pubView = document.getElementById('pubView');
-  pwdScreen.style.display='flex';
-
-  // Store token for password check
-  window._pubToken = token;
-
-  // Load project by token
-  try{
-    const snap = await getDocs(query(collection(db,'projects')));
-    const proj = snap.docs.map(d=>({id:d.id,...d.data()})).find(p=>p.shareToken===token&&p.shareActive);
-    if(!proj){
-      pwdScreen.innerHTML=`<div style="text-align:center;padding:60px 24px;color:var(--g5);">
-        <div style="font-size:48px;margin-bottom:16px;">🔒</div>
-        <div style="font-family:var(--fd);font-size:20px;font-weight:700;color:var(--wh);">Link inválido ou revogado</div>
-        <div style="margin-top:8px;font-size:13px;">Este link não está mais disponível.</div>
-      </div>`;
-      return;
-    }
-    window._pubProject = proj;
-    // Show password screen
-    document.getElementById('pubPwdInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkPubPwd();});
-  }catch(e){
-    pwdScreen.innerHTML=`<div style="text-align:center;padding:60px;color:var(--g5);">Erro ao carregar projeto.</div>`;
-  }
-}
-
-window.checkPubPwd = ()=>{
-  const proj = window._pubProject;
-  if(!proj) return;
-  const pwd = document.getElementById('pubPwdInput').value;
-  if(pwd !== proj.sharePassword){
-    document.getElementById('pubPwdErr').style.display='block';
-    return;
-  }
-  document.getElementById('pubPwdScreen').style.display='none';
-  renderPublicView(proj);
-};
-
-function renderPublicView(p){
-  const pubView = document.getElementById('pubView');
-  pubView.style.display='block';
-
-  // Filter timeline: only delivery, update, comment, reply — NO block, doc, ceo_*, internal
-  const publicTypes = ['delivery','update','comment','reply'];
-  const tl = [...(p.timeline||[])].filter(e=>publicTypes.includes(e.type)).sort((a,b)=>b.ts.localeCompare(a.ts));
-
-  const tlHtml = tl.length===0
-    ? `<div style="color:var(--g5);font-size:13px;padding:20px 0;">Nenhuma atualização publicada ainda.</div>`
-    : tl.map(e=>{
-        const icons={delivery:'📦',update:'✏️',comment:'💬',reply:'↩️'};
-        const labels={delivery:'Entrega Parcial',update:'Atualização',comment:'Comentário',reply:'Resposta'};
-        const colors={delivery:'rgba(46,204,113,.15)',update:'rgba(241,196,15,.12)',comment:'rgba(155,89,182,.15)',reply:'rgba(42,82,152,.2)'};
-        const tcol={delivery:'#2ecc71',update:'#f1c40f',comment:'#9b59b6',reply:'#6ea8fe'};
-        return`<div class="pub-tl-item">
-          <div class="pub-tl-icon">${icons[e.type]||'📝'}</div>
-          <div class="pub-tl-body">
-            <div class="pub-tl-tag" style="background:${colors[e.type]};color:${tcol[e.type]};">${labels[e.type]||e.type}</div>
-            <div class="pub-tl-text">${esc(e.text)}</div>
-            <div class="pub-tl-meta">Por <strong>${esc(e.author)}</strong> · ${fmtTs(e.ts)}</div>
-          </div></div>`;
-      }).join('');
-
-  const tipos = Array.isArray(p.tipos) ? p.tipos.join(', ') : (p.type||'—');
-  const setH = (p.setores||[]).map(s=>`<span class="stag">${esc(s)}</span>`).join('')||'—';
-
-  document.getElementById('pubContent').innerHTML=`
-    <div class="pub-card">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;">
-        <div>
-          ${p.projectId?`<div style="font-family:var(--fd);font-size:11px;font-weight:700;color:var(--b3);letter-spacing:.08em;margin-bottom:6px;">${p.projectId}</div>`:''}
-          <div style="font-family:var(--fd);font-size:22px;font-weight:800;">${esc(p.name)}</div>
-        </div>
-        ${sBadge(p.status)}
-      </div>
-      <div class="pub-info-grid">
-        <div class="pub-info-item"><span class="pub-info-label">Tipo</span><span class="pub-info-value">${esc(tipos)}</span></div>
-        <div class="pub-info-item"><span class="pub-info-label">Prioridade</span><span class="pub-info-value">${pBadge(p.priority)}</span></div>
-        <div class="pub-info-item"><span class="pub-info-label">Responsável</span><span class="pub-info-value">${p.resp||'—'}</span></div>
-        <div class="pub-info-item"><span class="pub-info-label">Solicitado por</span><span class="pub-info-value">${esc(p.requester||'—')}</span></div>
-        <div class="pub-info-item"><span class="pub-info-label">Data Estimada</span><span class="pub-info-value">${fmtD(p.endDate)}</span></div>
-        <div class="pub-info-item"><span class="pub-info-label">Data Real</span><span class="pub-info-value">${fmtD(p.endDateReal)||'—'}</span></div>
-      </div>
-      ${p.setores&&p.setores.length?`<div style="margin-top:14px;"><span class="pub-info-label">Setor</span><div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">${setH}</div></div>`:''}
-      ${p.description?`<div style="margin-top:14px;border-top:1px solid var(--g2);padding-top:14px;"><span class="pub-info-label">Descrição</span><div style="font-size:13px;color:var(--wh);line-height:1.7;margin-top:6px;">${esc(p.description)}</div></div>`:''}
-    </div>
-    <div class="pub-card">
-      <div class="pub-card-title">📋 Atualizações do Projeto</div>
-      ${tlHtml}
-    </div>
-    <div style="text-align:center;padding:20px;color:var(--g5);font-size:11px;">
-      Gerado por Independent Brazil · Inteligência &amp; Projetos
-    </div>`;
-}
-
-// ── SHARE LINK MANAGEMENT (admin/colab only) ──
 window.openShare = async(id)=>{
   if(role==='ceo') return;
   const p = projects.find(x=>x.id===id);
@@ -1394,6 +1114,86 @@ window.revokeShare = async(id)=>{
     CM('mShare');
   }catch(e){toast('Erro: '+e.message,'err');}
 };
+
+// ── PUBLIC VIEW FUNCTIONS ──
+async function loadPublicView(token){
+  const pwdScreen=document.getElementById('pubPwdScreen');
+  pwdScreen.style.display='flex';
+  try{
+    const snap=await getDocs(collection(db,'projects'));
+    const proj=snap.docs.map(d=>({id:d.id,...d.data()})).find(p=>p.shareToken===token&&p.shareActive);
+    if(!proj){
+      pwdScreen.innerHTML=`<div style="text-align:center;padding:60px 24px;color:var(--g5);">
+        <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+        <div style="font-family:var(--fd);font-size:20px;font-weight:700;color:var(--wh);">Link inválido ou revogado</div>
+        <div style="margin-top:8px;font-size:13px;">Este link não está mais disponível.</div>
+      </div>`;
+      return;
+    }
+    window._pubProject=proj;
+    document.getElementById('pubPwdInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkPubPwd();});
+  }catch(e){
+    pwdScreen.innerHTML=`<div style="text-align:center;padding:60px;color:var(--g5);">Erro ao carregar projeto.</div>`;
+  }
+}
+
+window.checkPubPwd=()=>{
+  const proj=window._pubProject;if(!proj)return;
+  const pwd=document.getElementById('pubPwdInput').value;
+  if(pwd!==proj.sharePassword){document.getElementById('pubPwdErr').style.display='block';return;}
+  document.getElementById('pubPwdScreen').style.display='none';
+  renderPublicView(proj);
+};
+
+function renderPublicView(p){
+  const pubView=document.getElementById('pubView');
+  pubView.style.display='block';
+  const publicTypes=['delivery','update','comment','reply'];
+  const tl=[...(p.timeline||[])].filter(e=>publicTypes.includes(e.type)).sort((a,b)=>b.ts.localeCompare(a.ts));
+  const tlHtml=tl.length===0
+    ?`<div style="color:var(--g5);font-size:13px;padding:20px 0;">Nenhuma atualização publicada ainda.</div>`
+    :tl.map(e=>{
+        const icons={delivery:'📦',update:'✏️',comment:'💬',reply:'↩️'};
+        const labels={delivery:'Entrega Parcial',update:'Atualização',comment:'Comentário',reply:'Resposta'};
+        const colors={delivery:'rgba(46,204,113,.15)',update:'rgba(241,196,15,.12)',comment:'rgba(155,89,182,.15)',reply:'rgba(42,82,152,.2)'};
+        const tcol={delivery:'#2ecc71',update:'#f1c40f',comment:'#9b59b6',reply:'#6ea8fe'};
+        return`<div class="pub-tl-item">
+          <div class="pub-tl-icon">${icons[e.type]||'📝'}</div>
+          <div class="pub-tl-body">
+            <div class="pub-tl-tag" style="background:${colors[e.type]};color:${tcol[e.type]};">${labels[e.type]||e.type}</div>
+            <div class="pub-tl-text">${esc(e.text)}</div>
+            <div class="pub-tl-meta">Por <strong>${esc(e.author)}</strong> · ${fmtTs(e.ts)}</div>
+          </div></div>`;
+      }).join('');
+  const tipos=Array.isArray(p.tipos)?p.tipos.join(', '):(p.type||'—');
+  const setH=(p.setores||[]).map(s=>`<span class="stag">${esc(s)}</span>`).join('')||'—';
+  document.getElementById('pubContent').innerHTML=`
+    <div class="pub-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;">
+        <div>
+          ${p.projectId?`<div style="font-family:var(--fd);font-size:11px;font-weight:700;color:var(--b3);letter-spacing:.08em;margin-bottom:6px;">${p.projectId}</div>`:''}
+          <div style="font-family:var(--fd);font-size:22px;font-weight:800;">${esc(p.name)}</div>
+        </div>
+        ${sBadge(p.status)}
+      </div>
+      <div class="pub-info-grid">
+        <div class="pub-info-item"><span class="pub-info-label">Tipo</span><span class="pub-info-value">${esc(tipos)}</span></div>
+        <div class="pub-info-item"><span class="pub-info-label">Prioridade</span><span class="pub-info-value">${pBadge(p.priority)}</span></div>
+        <div class="pub-info-item"><span class="pub-info-label">Responsável</span><span class="pub-info-value">${p.resp||'—'}</span></div>
+        <div class="pub-info-item"><span class="pub-info-label">Solicitado por</span><span class="pub-info-value">${esc(p.requester||'—')}</span></div>
+        <div class="pub-info-item"><span class="pub-info-label">Data Estimada</span><span class="pub-info-value">${fmtD(p.endDate)}</span></div>
+        <div class="pub-info-item"><span class="pub-info-label">Data Real</span><span class="pub-info-value">${fmtD(p.endDateReal)||'—'}</span></div>
+      </div>
+      ${p.setores&&p.setores.length?`<div style="margin-top:14px;"><span class="pub-info-label">Setor</span><div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">${setH}</div></div>`:''}
+      ${p.description?`<div style="margin-top:14px;border-top:1px solid var(--g2);padding-top:14px;"><span class="pub-info-label">Descrição</span><div style="font-size:13px;color:var(--wh);line-height:1.7;margin-top:6px;">${esc(p.description)}</div></div>`:''}
+    </div>
+    <div class="pub-card">
+      <div class="pub-card-title">📋 Atualizações do Projeto</div>
+      ${tlHtml}
+    </div>
+    <div style="text-align:center;padding:20px;color:var(--g5);font-size:11px;">Gerado por Independent Brazil · Inteligência &amp; Projetos</div>`;
+}
+
 
 window.copyLink = (text)=>{
   navigator.clipboard.writeText(text).then(()=>toast('Copiado!','ok')).catch(()=>{
