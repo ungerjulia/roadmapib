@@ -298,10 +298,69 @@ canvas{max-height:260px;}
 .empty-i{font-size:44px;margin-bottom:14px;}
 .empty-t{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--g5);}
 .empty-s{font-size:12px;color:var(--g4);margin-top:5px;}
+/* SHARE LINK */
+.share-link-box{background:var(--g2);border:1px solid var(--g3);border-radius:9px;padding:12px 14px;display:flex;align-items:center;gap:8px;margin:12px 0;}
+.share-link-url{flex:1;font-size:12px;color:var(--b3);word-break:break-all;font-family:monospace;}
+.btn-copy{padding:6px 12px;background:var(--b2);border:none;color:#fff;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--fd);}
+.btn-copy:hover{opacity:.85;}
+.btn-revoke{padding:6px 12px;background:rgba(200,16,46,.15);border:1px solid rgba(200,16,46,.3);color:#ff6b6b;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--fd);}
+.btn-revoke:hover{background:rgba(200,16,46,.25);}
+.share-status{display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:10px;}
+.share-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.share-dot.on{background:var(--grn);}
+.share-dot.off{background:var(--g4);}
+/* PUBLIC TIMELINE */
+.pub-tl-item{display:flex;gap:12px;margin-bottom:16px;position:relative;}
+.pub-tl-item:not(:last-child)::after{content:"";position:absolute;left:15px;top:32px;bottom:-16px;width:1px;background:var(--g3);}
+.pub-tl-icon{width:30px;height:30px;border-radius:50%;background:var(--g2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.pub-tl-body{flex:1;}
+.pub-tl-tag{display:inline-flex;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;margin-bottom:4px;}
+.pub-tl-text{font-size:13px;color:var(--wh);line-height:1.6;background:var(--g2);padding:10px 13px;border-radius:8px;border:1px solid var(--g3);}
+.pub-tl-meta{font-size:11px;color:var(--g5);margin-top:4px;}
+.pub-card{background:var(--g1);border:1px solid var(--g2);border-radius:13px;padding:22px;margin-bottom:18px;}
+.pub-card-title{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g5);margin-bottom:12px;}
+.pub-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.pub-info-item{display:flex;flex-direction:column;gap:3px;}
+.pub-info-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g5);}
+.pub-info-value{font-size:13px;color:var(--wh);}
+
 .toast{position:fixed;bottom:22px;right:22px;padding:11px 18px;background:var(--g1);border:1px solid var(--g2);border-radius:10px;font-size:12px;font-weight:500;color:var(--wh);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast.ok{border-color:var(--grn);color:var(--grn);}
 .toast.err{border-color:var(--red);color:var(--red);}
+
+/* SHARE LINK */
+.share-link-box{background:var(--g2);border:1px solid var(--g3);border-radius:8px;padding:10px 13px;font-size:12px;color:var(--b3);word-break:break-all;margin:10px 0;font-family:monospace;}
+.btn-copy{padding:7px 14px;background:var(--b2);border:none;color:#fff;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--fd);}
+.btn-copy:hover{opacity:.85;}
+.btn-revoke{padding:7px 14px;background:rgba(200,16,46,.15);border:1px solid var(--red);color:var(--red);border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--fd);}
+.btn-revoke:hover{background:rgba(200,16,46,.25);}
+
+/* PUBLIC VIEW */
+.pv-header{text-align:center;padding:28px 0 20px;border-bottom:1px solid var(--g2);margin-bottom:24px;}
+.pv-logo{width:48px;height:48px;border-radius:10px;margin:0 auto 12px;}
+.pv-company{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g5);margin-bottom:6px;}
+.pv-title{font-family:var(--fd);font-size:24px;font-weight:800;margin-bottom:8px;}
+.pv-id{display:inline-flex;padding:3px 12px;background:rgba(110,168,254,.12);border:1px solid rgba(110,168,254,.3);border-radius:20px;font-size:11px;font-weight:700;color:var(--b3);font-family:var(--fd);}
+.pv-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+.pv-card{background:var(--g1);border:1px solid var(--g2);border-radius:10px;padding:14px 16px;}
+.pv-card-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g5);margin-bottom:5px;}
+.pv-card-value{font-size:14px;color:var(--wh);font-weight:500;}
+.pv-tl-title{font-family:var(--fd);font-size:15px;font-weight:700;margin-bottom:14px;color:var(--wh);}
+.pv-tl-item{display:flex;gap:12px;margin-bottom:14px;padding:12px 14px;background:var(--g1);border:1px solid var(--g2);border-radius:10px;}
+.pv-tl-icon{font-size:18px;flex-shrink:0;}
+.pv-tl-body{flex:1;}
+.pv-tl-meta{font-size:11px;color:var(--g5);margin-bottom:4px;}
+.pv-tl-meta strong{color:var(--wh);}
+.pv-tl-text{font-size:13px;color:var(--wh);line-height:1.5;}
+.pv-footer{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--g2);font-size:11px;color:var(--g4);}
+.pv-pwd-box{max-width:360px;margin:80px auto;background:var(--g1);border:1px solid var(--g2);border-radius:16px;padding:36px 32px;text-align:center;}
+.pv-pwd-box h2{font-family:var(--fd);font-size:20px;font-weight:800;margin-bottom:8px;}
+.pv-pwd-box p{font-size:13px;color:var(--g5);margin-bottom:20px;}
+.pv-pwd-box input{width:100%;padding:11px 14px;background:var(--g2);border:1px solid var(--g3);border-radius:8px;color:var(--wh);font-family:var(--fb);font-size:14px;outline:none;margin-bottom:12px;text-align:center;letter-spacing:.2em;}
+.pv-pwd-box input:focus{border-color:var(--b3);}
+.pv-pwd-err{color:var(--red);font-size:12px;margin-top:-6px;margin-bottom:10px;display:none;}
+
 </style>
 </head>
 <body>
@@ -372,8 +431,16 @@ canvas{max-height:260px;}
     <div class="mh"><div class="mt2" id="mFT">Novo Projeto</div><button class="bc" onclick="CM('mForm')">✕</button></div>
     <div class="fr">
       <div class="fg2 full"><label>Nome do Projeto *</label><input type="text" id="fNm" placeholder="Nome do projeto"/></div>
-      <div class="fg2"><label>Tipo *</label>
-        <select id="fTp"><option value="">Selecione</option><option>Software</option><option>Automação</option><option>Melhoria de Processo</option><option>App Web</option><option>Criação de Agente</option><option>Refatoração</option></select>
+      <div class="fg2 full"><label>Tipo * <span style="font-size:10px;font-weight:400;color:var(--g4);text-transform:none;letter-spacing:0">(selecione um ou mais)</span></label>
+        <div class="sg" id="tGrid">
+          <label class="si"><input type="checkbox" value="Software" onchange="tgT(this)"/> Software</label>
+          <label class="si"><input type="checkbox" value="Automação" onchange="tgT(this)"/> Automação</label>
+          <label class="si"><input type="checkbox" value="Melhoria de Processo" onchange="tgT(this)"/> Melhoria de Processo</label>
+          <label class="si"><input type="checkbox" value="App Web" onchange="tgT(this)"/> App Web</label>
+          <label class="si"><input type="checkbox" value="Criação de Agente" onchange="tgT(this)"/> Criação de Agente</label>
+          <label class="si"><input type="checkbox" value="Refatoração" onchange="tgT(this)"/> Refatoração</label>
+        </div>
+        <input type="hidden" id="fTp"/>
       </div>
       <div class="fg2"><label>Etapa</label>
         <select id="fSt"><option value="Backlog">Backlog</option><option value="Em Planejamento">Em Planejamento</option><option value="Em Execucao">Em Execução</option><option value="Concluido">Concluído</option><option value="Pausado">Pausado</option></select>
@@ -497,6 +564,9 @@ onAuthStateChanged(auth,async u=>{
   }
 });
 
+// Check if this is a public update link access
+checkPublicView();
+
 // ── FIRESTORE ──
 async function loadP(){
   try{const q=query(collection(db,"projects"),orderBy("createdAt","desc"));const s=await getDocs(q);projects=s.docs.map(d=>({id:d.id,...d.data()}));}
@@ -550,7 +620,9 @@ window.openNew=()=>{
   if(role==="ceo")return;
   editId=null;document.getElementById("mFT").textContent="Novo Projeto";
   ["fNm","fSd","fEd","fEr","fRq","fLk","fIm","fDs","fIp"].forEach(i=>document.getElementById(i).value="");
-  document.getElementById("fTp").value="";document.getElementById("fSt").value="Backlog";
+  setTipos([]);
+  document.getElementById("fSt").value="Backlog";
+  document.querySelectorAll("#tGrid input").forEach(cb=>{cb.checked=false;cb.closest(".si").classList.remove("chk");});
   document.getElementById("fPr").value="";document.getElementById("fRp").value="";
   document.getElementById("fEis").value="";selEis(null);
   document.querySelectorAll("#sGrid input").forEach(cb=>{cb.checked=false;cb.closest(".si").classList.remove("chk");});
@@ -560,7 +632,10 @@ window.openEdit=id=>{
   if(role==="ceo")return;
   const p=projects.find(x=>x.id===id);if(!p)return;
   editId=id;document.getElementById("mFT").textContent="Editar Projeto";
-  document.getElementById("fNm").value=p.name||"";document.getElementById("fTp").value=p.type||"";
+  document.getElementById("fNm").value=p.name||"";
+  // Restore tipo checkboxes
+  setTipos(Array.isArray(p.tipos)?p.tipos:(p.type?p.type.split(", ").map(t=>t.trim()):[]));    cb.checked?cb.closest(".si").classList.add("chk"):cb.closest(".si").classList.remove("chk");
+  });
   document.getElementById("fSt").value=p.status||"Backlog";document.getElementById("fRp").value=p.resp||"";
   document.getElementById("fPr").value=p.priority||"";document.getElementById("fSd").value=p.startDate||"";
   document.getElementById("fEd").value=p.endDate||"";document.getElementById("fEr").value=p.endDateReal||"";
@@ -574,12 +649,23 @@ window.openEdit=id=>{
 function setDP(){const d=role==="colab";["fSd","fEd","fEr"].forEach(i=>document.getElementById(i).disabled=d);}
 window.selEis=q=>{document.querySelectorAll("#eisGrid .eq2c").forEach(el=>el.classList.toggle("sel",el.dataset.q===q));document.getElementById("fEis").value=q||"";};
 window.tgS=cb=>{cb.checked?cb.closest(".si").classList.add("chk"):cb.closest(".si").classList.remove("chk");};
+window.tgT=cb=>{cb.checked?cb.closest(".si").classList.add("chk"):cb.closest(".si").classList.remove("chk");};
+function getTipos(){const arr=[];document.querySelectorAll("#tGrid input:checked").forEach(cb=>arr.push(cb.value));return arr;}
+function setTipos(arr){document.querySelectorAll("#tGrid input").forEach(cb=>{cb.checked=(arr||[]).includes(cb.value);cb.checked?cb.closest(".si").classList.add("chk"):cb.closest(".si").classList.remove("chk");});}
+window.tgT=cb=>{
+  cb.checked?cb.closest(".si").classList.add("chk"):cb.closest(".si").classList.remove("chk");
+  // Update hidden field with comma-separated values
+  const vals=[...document.querySelectorAll("#tGrid input:checked")].map(c=>c.value);
+  document.getElementById("fTp").value=vals.join(", ");
+};
 
 window.saveP=async()=>{
-  const nm=document.getElementById("fNm").value.trim(),tp=document.getElementById("fTp").value;
-  if(!nm||!tp){toast("Preencha nome e tipo.","err");return;}
+  const nm=document.getElementById("fNm").value.trim();
+  const tipos_arr=getTipos();if(!nm||tipos_arr.length===0){toast("Selecione pelo menos um tipo.","err");return;}
+  const tp=tipos_arr.join(", ");
   const setores=[];document.querySelectorAll("#sGrid input:checked").forEach(cb=>setores.push(cb.value));
-  const data={name:nm,type:tp,status:document.getElementById("fSt").value,resp:document.getElementById("fRp").value,priority:document.getElementById("fPr").value,eis:document.getElementById("fEis").value||"",requester:document.getElementById("fRq").value.trim(),setores,link:document.getElementById("fLk").value.trim(),image:document.getElementById("fIm").value.trim(),description:document.getElementById("fDs").value.trim(),impact:document.getElementById("fIp").value.trim(),updatedAt:serverTimestamp()};
+  const typesArr=[...document.querySelectorAll("#tGrid input:checked")].map(c=>c.value);
+  const data={name:nm,type:typesArr.join(", "),types:typesArr,status:document.getElementById("fSt").value,resp:document.getElementById("fRp").value,priority:document.getElementById("fPr").value,eis:document.getElementById("fEis").value||"",requester:document.getElementById("fRq").value.trim(),setores,link:document.getElementById("fLk").value.trim(),image:document.getElementById("fIm").value.trim(),description:document.getElementById("fDs").value.trim(),impact:document.getElementById("fIp").value.trim(),updatedAt:serverTimestamp()};
   if(role==="admin"){data.startDate=document.getElementById("fSd").value;data.endDate=document.getElementById("fEd").value;data.endDateReal=document.getElementById("fEr").value;}
   try{
     if(editId){
@@ -636,7 +722,7 @@ window.openDetail=id=>{
   const iH=p.image?`<img src="${esc(p.image)}" style="max-width:100%;max-height:160px;border-radius:8px;border:1px solid var(--g3);margin-top:4px;"/>`:"";
   const pid=p.projectId?`<span class="studio-id">${p.projectId}</span>`:"";
   document.getElementById("dLeft").innerHTML=`<div class="dg">
-    <div class="di full" style="flex-direction:row;align-items:center;gap:10px;margin-bottom:4px;">${pid}${role!=="ceo"?`<button class="btn-studio" onclick="CM('mDetail');openStudio('${p.id}')">📁 Estúdio</button>`:""}</div>
+    <div class="di full" style="flex-direction:row;align-items:center;gap:10px;margin-bottom:4px;">${pid}${role!=="ceo"?`<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:2px;"><button class="btn-studio" onclick="CM('mDetail');openStudio('${p.id}')">📁 Estúdio</button><button class="btn-studio" style="color:${p.shareActive?'var(--grn)':'var(--b3)'}" onclick="CM('mDetail');openShare('${p.id}')">🔗 Link de Atualização</button>${role==="admin"||role==="colab"?`<button class="bs2" style="font-size:11px;" onclick="CM('mDetail');openEdit('${p.id}')">✏️ Editar</button>`:""}</div>`:""}</div>
     <div class="di"><span class="dil">Tipo</span><span class="div2"><span class="badge bt">${esc(p.type||"—")}</span></span></div>
     <div class="di"><span class="dil">Etapa</span><span class="div2">${sBadge(p.status)}</span></div>
     <div class="di"><span class="dil">Prioridade</span><span class="div2">${pBadge(p.priority)}</span></div>
@@ -651,7 +737,10 @@ window.openDetail=id=>{
     ${p.image?`<div class="di full"><span class="dil">Imagem</span>${iH}</div>`:""}
     <div class="di full"><span class="dil">Descrição</span><span class="div2">${esc(p.description||"—")}</span></div>
     <div class="di full"><span class="dil">Impacto Esperado</span><span class="div2">${esc(p.impact||"—")}</span></div>
-    ${role==="admin"?`<div class="di full" style="margin-top:8px;"><button class="bs2" style="font-size:11px;" onclick="CM('mDetail');openEdit('${p.id}')">✏️ Editar Projeto</button></div>`:""}
+    <div class="di full" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+      ${role==="ceo"?"":role==="admin"?`<button class="bs2" style="font-size:11px;" onclick="CM('mDetail');openEdit('${p.id}')">✏️ Editar</button>`:""}
+      ${role!=="ceo"?`<button class="btn-studio" onclick="CM('mDetail');openShare('${p.id}')" style="${p.shareActive?'border-color:var(--grn);color:var(--grn);':''}">🔗 ${p.shareActive?'Link ativo':'Gerar link'}</button>`:""}
+    </div>
   </div>`;
   const tl=[...(p.timeline||[])].sort((a,b)=>b.ts.localeCompare(a.ts));
   const isCEO=e=>["ceo_approval","ceo_suggestion","ceo_comment"].includes(e.type)||e.email==="lincon@independentbrazil.com";
@@ -919,7 +1008,7 @@ function bTable(){
   return`<div class="ph"><div><div class="pt">${fs||"Todos os Projetos"}</div><div class="ps">${fp.length} projeto${fp.length!==1?"s":""} encontrado${fp.length!==1?"s":""}</div></div>${ab}</div>
   <div class="flt">
     <input id="sBox" placeholder="🔍 Buscar…" oninput="apS()"/>
-    <select id="fTF" onchange="apS()"><option value="">Todos tipos</option><option>Software</option><option>Automação</option><option>Melhoria de Processo</option><option>App Web</option><option>Criação de Agente</option><option>Refatoração</option></select>
+    <select id="fTF" onchange="apS()"><option value="">Todos tipos</option><option value="Software">Software</option><option value="Automação">Automação</option><option value="Melhoria de Processo">Melhoria de Processo</option><option value="App Web">App Web</option><option value="Criação de Agente">Criação de Agente</option><option value="Refatoração">Refatoração</option></select>
     <select id="fPF" onchange="apS()"><option value="">Todas prioridades</option><option value="Critico">Crítico</option><option value="Alto">Alto</option><option value="Medio">Médio</option><option value="Baixo">Baixo</option></select>
     <select id="fSF" onchange="apS()"><option value="">Todos setores</option>${SETORES.map(s=>`<option>${s}</option>`).join("")}</select>
     <select id="fRF" onchange="apS()"><option value="">Todos responsáveis</option><option value="Julia">Júlia</option><option value="Rafael">Rafael</option><option value="Ambos">Ambos</option></select>
@@ -930,7 +1019,7 @@ window.apS=()=>{
   const q=(document.getElementById("sBox")||{}).value||"",tp=(document.getElementById("fTF")||{}).value||"",pr=(document.getElementById("fPF")||{}).value||"",st=(document.getElementById("fSF")||{}).value||"",rp=(document.getElementById("fRF")||{}).value||"";
   let fp=fs?projects.filter(p=>p.status===fs):projects;
   if(q)fp=fp.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())||(p.description||"").toLowerCase().includes(q.toLowerCase()));
-  if(tp)fp=fp.filter(p=>p.type===tp);if(pr)fp=fp.filter(p=>p.priority===pr);
+  if(tp)fp=fp.filter(p=>(p.types||[p.type||""]).some(t=>t.includes(tp)));if(pr)fp=fp.filter(p=>p.priority===pr);
   if(st)fp=fp.filter(p=>(p.setores||[]).includes(st));if(rp)fp=fp.filter(p=>p.resp===rp);
   document.getElementById("tWrap").innerHTML=bTBody(fp);
 };
@@ -949,11 +1038,170 @@ function bTBody(list){
     <td onclick="event.stopPropagation()">
       <div style="display:flex;gap:5px;">
         ${role!=="ceo"?`<button class="btn-studio" style="padding:4px 9px;font-size:11px;" onclick="event.stopPropagation();openStudio('${p.id}')">📁</button>`:""}
+        ${role!=="ceo"?`<button class="btn-studio" style="padding:4px 9px;font-size:11px;${p.shareActive?'border-color:var(--grn);color:var(--grn);':''}" onclick="event.stopPropagation();openShare('${p.id}')">🔗</button>`:""}
         ${role!=="ceo"?`<div class="ra" style="opacity:1;"><button class="bti" onclick="event.stopPropagation();openEdit('${p.id}')">✏️</button>${role==="admin"?`<button class="bti dng" onclick="event.stopPropagation();openDel('${p.id}','${esc(p.name)}')">🗑</button>`:""}</div>`:""}
       </div>
     </td>
   </tr>`).join("");
   return`<table><thead><tr><th>ID / Projeto</th><th>Tipo</th><th>Etapa</th><th>Prioridade</th><th>Eisenhower</th><th>Responsável</th><th>Data Est.</th><th>Data Real</th><th>Setor</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+
+// ══════════════════════════════
+// ── SHARE LINK ──
+// ══════════════════════════════
+function genToken(){ return [...Array(32)].map(()=>Math.random().toString(36)[2]||"a").join(""); }
+
+window.openShare=async(id)=>{
+  const p=projects.find(x=>x.id===id);if(!p)return;
+  document.getElementById("mShareTitle").textContent=`🔗 Link — ${p.name.slice(0,30)}`;
+  renderShareBody(p);
+  OM("mShare");
+};
+
+function renderShareBody(p){
+  const hasLink=p.shareToken&&p.shareActive;
+  const baseUrl=window.location.origin+window.location.pathname;
+  const link=hasLink?`${baseUrl}?update=${p.shareToken}`:"";
+  document.getElementById("shareBody").innerHTML=hasLink?`
+    <p style="font-size:13px;color:var(--g5);margin-bottom:12px;">Link ativo para <strong style="color:var(--wh)">${esc(p.name)}</strong>. Compartilhe com o solicitante:</p>
+    <div class="share-link-box">${link}</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <button class="btn-copy" onclick="copyLink('${link}')">📋 Copiar link</button>
+      <button class="btn-revoke" onclick="revokeLink('${p.id}')">🚫 Cancelar link</button>
+    </div>
+    <div style="font-size:11px;color:var(--g5);padding:10px 12px;background:var(--g2);border-radius:8px;">
+      ℹ️ A senha definida foi enviada separadamente. Clique em "Cancelar link" para revogar o acesso imediatamente.
+    </div>
+  `:`
+    <p style="font-size:13px;color:var(--g5);margin-bottom:16px;">Gere um link protegido por senha para o solicitante acompanhar o projeto sem precisar de login.</p>
+    <div class="fg2">
+      <label>Senha de acesso</label>
+      <input type="text" id="sharePwd" placeholder="Ex: IB2025" style="width:100%;padding:10px 13px;background:var(--g2);border:1px solid var(--g3);border-radius:8px;color:var(--wh);font-family:var(--fb);font-size:14px;outline:none;margin-bottom:4px;"/>
+      <div style="font-size:11px;color:var(--g4);margin-top:4px;">Anote a senha — você precisará enviá-la ao solicitante separadamente.</div>
+    </div>
+    <div class="ma" style="margin-top:16px;padding-top:16px;">
+      <button class="bs2" onclick="CM('mShare')">Cancelar</button>
+      <button class="bsv" onclick="generateLink('${p.id}')">🔗 Gerar Link</button>
+    </div>
+  `;
+}
+
+window.generateLink=async(id)=>{
+  const pwd=document.getElementById("sharePwd")?.value.trim();
+  if(!pwd){toast("Digite uma senha.","err");return;}
+  const token=genToken();
+  // Store hashed-ish pwd (simple, not cryptographic — just to avoid plain text)
+  const pwdKey=btoa(pwd);
+  try{
+    await updateDoc(doc(db,"projects",id),{shareToken:token,sharePwd:pwdKey,shareActive:true,shareCreatedAt:new Date().toISOString(),shareCreatedBy:uname});
+    toast("Link gerado! ✓","ok");
+    await loadP();
+    const p=projects.find(x=>x.id===id);renderShareBody(p);
+  }catch(e){toast("Erro: "+e.message,"err");}
+};
+
+window.copyLink=async(link)=>{
+  try{await navigator.clipboard.writeText(link);toast("Link copiado! ✓","ok");}
+  catch{toast("Copie manualmente.","err");}
+};
+
+window.revokeLink=async(id)=>{
+  if(!confirm("Revogar o link? O solicitante perderá o acesso imediatamente."))return;
+  try{
+    await updateDoc(doc(db,"projects",id),{shareActive:false,shareToken:"",sharePwd:""});
+    toast("Link revogado.","ok");
+    await loadP();
+    const p=projects.find(x=>x.id===id);renderShareBody(p);
+  }catch(e){toast("Erro: "+e.message,"err");}
+};
+
+// ── PUBLIC VIEW (no login needed) ──
+async function checkPublicView(){
+  const params=new URLSearchParams(window.location.search);
+  const token=params.get("update");
+  if(!token)return false;
+  // Show public view, hide app/login
+  document.getElementById("ls").style.display="none";
+  document.getElementById("app").style.display="none";
+  document.getElementById("lov").style.display="none";
+  document.getElementById("publicView").style.display="block";
+  await renderPublicView(token);
+  return true;
+}
+
+async function renderPublicView(token){
+  const pv=document.getElementById("pvContent");
+  pv.innerHTML=`<div class="pv-pwd-box"><div style="font-size:32px;margin-bottom:10px;">🔒</div><h2>Acesso Protegido</h2><p>Digite a senha fornecida pela equipe de TI para visualizar o progresso do projeto.</p><input type="password" id="pvPwd" placeholder="••••••••" /><div class="pv-pwd-err" id="pvPwdErr">Senha incorreta. Tente novamente.</div><button class="bsv" style="width:100%;" onclick="pvLogin('${token}')">Acessar</button></div>`;
+  document.getElementById("pvPwd").addEventListener("keydown",e=>{if(e.key==="Enter")pvLogin(token);});
+}
+
+window.pvLogin=async(token)=>{
+  const pwd=document.getElementById("pvPwd")?.value.trim();
+  if(!pwd)return;
+  // Find project by token
+  try{
+    const snap=await getDocs(collection(db,"projects"));
+    const proj=snap.docs.map(d=>({id:d.id,...d.data()})).find(p=>p.shareToken===token&&p.shareActive);
+    if(!proj){document.getElementById("pvPwdErr").style.display="block";document.getElementById("pvPwdErr").textContent="Link inválido ou expirado.";return;}
+    if(atob(proj.sharePwd||"")!==pwd){document.getElementById("pvPwdErr").style.display="block";return;}
+    renderPublicProject(proj);
+  }catch(e){document.getElementById("pvPwdErr").style.display="block";document.getElementById("pvPwdErr").textContent="Erro ao acessar. Tente novamente.";}
+};
+
+function renderPublicProject(p){
+  // Filter timeline — show only: delivery, update, comment (hide: block/doc/ceo_*/reply)
+  const VISIBLE=["delivery","update","comment"];
+  const tl=[...(p.timeline||[])].filter(e=>VISIBLE.includes(e.type)).sort((a,b)=>b.ts.localeCompare(a.ts));
+  const statusColors={"Backlog":"#ccc","Em Planejamento":"#6ea8fe","Em Execucao":"#f1c40f","Concluido":"#2ecc71","Pausado":"#ff6b6b"};
+  const statusLabels={"Backlog":"Backlog","Em Planejamento":"Em Planejamento","Em Execucao":"Em Execução","Concluido":"Concluído","Pausado":"Pausado"};
+  const statusColor=statusColors[p.status]||"#8a90a0";
+  const tlHtml=tl.length===0
+    ?`<div style="text-align:center;padding:28px;color:var(--g5);font-size:13px;">Nenhuma atualização registrada ainda.</div>`
+    :tl.map(e=>`<div class="pv-tl-item">
+      <div class="pv-tl-icon">${{delivery:"📦",update:"✏️",comment:"💬"}[e.type]||"📝"}</div>
+      <div class="pv-tl-body">
+        <div class="pv-tl-meta"><strong>${esc(e.author)}</strong> · ${fmtTs(e.ts)}</div>
+        <div class="pv-tl-text">${esc(e.text)}</div>
+      </div></div>`).join("");
+  document.getElementById("pvContent").innerHTML=`
+    <div class="pv-header">
+      <div class="pv-company">Independent Brazil · Inteligência &amp; Projetos</div>
+      <div class="pv-title">${esc(p.name)}</div>
+      ${p.projectId?`<div class="pv-id">${p.projectId}</div>`:""}
+    </div>
+    <div class="pv-grid">
+      <div class="pv-card">
+        <div class="pv-card-label">Status</div>
+        <div class="pv-card-value" style="color:${statusColor};font-weight:700;">${statusLabels[p.status]||p.status||"—"}</div>
+      </div>
+      <div class="pv-card">
+        <div class="pv-card-label">Tipo</div>
+        <div class="pv-card-value">${esc(p.type||"—")}</div>
+      </div>
+      <div class="pv-card">
+        <div class="pv-card-label">Responsável</div>
+        <div class="pv-card-value">${esc(p.resp||"—")}</div>
+      </div>
+      <div class="pv-card">
+        <div class="pv-card-label">Data Estimada</div>
+        <div class="pv-card-value">${fmtD(p.endDate)}</div>
+      </div>
+      ${p.endDateReal?`<div class="pv-card" style="grid-column:1/-1;border-color:rgba(46,204,113,.3);">
+        <div class="pv-card-label" style="color:var(--grn);">✅ Data Real de Entrega</div>
+        <div class="pv-card-value" style="color:var(--grn);">${fmtD(p.endDateReal)}</div>
+      </div>`:""}
+      ${p.description?`<div class="pv-card" style="grid-column:1/-1;">
+        <div class="pv-card-label">Descrição</div>
+        <div class="pv-card-value" style="font-size:13px;line-height:1.6;">${esc(p.description)}</div>
+      </div>`:""}
+    </div>
+    <div class="pv-tl-title">📋 Atualizações do Projeto</div>
+    ${tlHtml}
+    <div class="pv-footer">
+      Este link foi gerado pela equipe de Inteligência &amp; Projetos — Independent Brazil.<br>
+      Para mais informações, entre em contato com projetos.inteligencia@independentbrazil.com
+    </div>`;
 }
 
 function OM(id){document.getElementById(id).classList.add("open");}
@@ -969,6 +1217,237 @@ document.getElementById("lp").addEventListener("keydown",e=>{if(e.key==="Enter")
 document.querySelectorAll(".mo").forEach(el=>el.addEventListener("click",e=>{if(e.target===el)el.classList.remove("open");}));
 document.addEventListener("click",e=>{const p=document.getElementById("notifPanel"),b=document.getElementById("bellRow");if(p&&!p.contains(e.target)&&b&&!b.contains(e.target))p.classList.remove("open");});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){document.getElementById("lightbox").classList.remove("open");}});
+
+
+// ══════════════════════════════════
+// ── SHARE LINK SYSTEM ──
+// ══════════════════════════════════
+
+// Check if we're in public view mode
+const urlParams = new URLSearchParams(window.location.search);
+const pubToken = urlParams.get('view');
+
+if(pubToken){
+  // PUBLIC VIEW MODE
+  document.getElementById('lov').style.display='none';
+  document.getElementById('ls').style.display='none';
+  document.getElementById('app').style.display='none';
+  loadPublicView(pubToken);
+}
+
+async function loadPublicView(token){
+  const pwdScreen = document.getElementById('pubPwdScreen');
+  const pubView = document.getElementById('pubView');
+  pwdScreen.style.display='flex';
+
+  // Store token for password check
+  window._pubToken = token;
+
+  // Load project by token
+  try{
+    const snap = await getDocs(query(collection(db,'projects')));
+    const proj = snap.docs.map(d=>({id:d.id,...d.data()})).find(p=>p.shareToken===token&&p.shareActive);
+    if(!proj){
+      pwdScreen.innerHTML=`<div style="text-align:center;padding:60px 24px;color:var(--g5);">
+        <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+        <div style="font-family:var(--fd);font-size:20px;font-weight:700;color:var(--wh);">Link inválido ou revogado</div>
+        <div style="margin-top:8px;font-size:13px;">Este link não está mais disponível.</div>
+      </div>`;
+      return;
+    }
+    window._pubProject = proj;
+    // Show password screen
+    document.getElementById('pubPwdInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkPubPwd();});
+  }catch(e){
+    pwdScreen.innerHTML=`<div style="text-align:center;padding:60px;color:var(--g5);">Erro ao carregar projeto.</div>`;
+  }
+}
+
+window.checkPubPwd = ()=>{
+  const proj = window._pubProject;
+  if(!proj) return;
+  const pwd = document.getElementById('pubPwdInput').value;
+  if(pwd !== proj.sharePassword){
+    document.getElementById('pubPwdErr').style.display='block';
+    return;
+  }
+  document.getElementById('pubPwdScreen').style.display='none';
+  renderPublicView(proj);
+};
+
+function renderPublicView(p){
+  const pubView = document.getElementById('pubView');
+  pubView.style.display='block';
+
+  // Filter timeline: only delivery, update, comment, reply — NO block, doc, ceo_*, internal
+  const publicTypes = ['delivery','update','comment','reply'];
+  const tl = [...(p.timeline||[])].filter(e=>publicTypes.includes(e.type)).sort((a,b)=>b.ts.localeCompare(a.ts));
+
+  const tlHtml = tl.length===0
+    ? `<div style="color:var(--g5);font-size:13px;padding:20px 0;">Nenhuma atualização publicada ainda.</div>`
+    : tl.map(e=>{
+        const icons={delivery:'📦',update:'✏️',comment:'💬',reply:'↩️'};
+        const labels={delivery:'Entrega Parcial',update:'Atualização',comment:'Comentário',reply:'Resposta'};
+        const colors={delivery:'rgba(46,204,113,.15)',update:'rgba(241,196,15,.12)',comment:'rgba(155,89,182,.15)',reply:'rgba(42,82,152,.2)'};
+        const tcol={delivery:'#2ecc71',update:'#f1c40f',comment:'#9b59b6',reply:'#6ea8fe'};
+        return`<div class="pub-tl-item">
+          <div class="pub-tl-icon">${icons[e.type]||'📝'}</div>
+          <div class="pub-tl-body">
+            <div class="pub-tl-tag" style="background:${colors[e.type]};color:${tcol[e.type]};">${labels[e.type]||e.type}</div>
+            <div class="pub-tl-text">${esc(e.text)}</div>
+            <div class="pub-tl-meta">Por <strong>${esc(e.author)}</strong> · ${fmtTs(e.ts)}</div>
+          </div></div>`;
+      }).join('');
+
+  const tipos = Array.isArray(p.tipos) ? p.tipos.join(', ') : (p.type||'—');
+  const setH = (p.setores||[]).map(s=>`<span class="stag">${esc(s)}</span>`).join('')||'—';
+
+  document.getElementById('pubContent').innerHTML=`
+    <div class="pub-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;">
+        <div>
+          ${p.projectId?`<div style="font-family:var(--fd);font-size:11px;font-weight:700;color:var(--b3);letter-spacing:.08em;margin-bottom:6px;">${p.projectId}</div>`:''}
+          <div style="font-family:var(--fd);font-size:22px;font-weight:800;">${esc(p.name)}</div>
+        </div>
+        ${sBadge(p.status)}
+      </div>
+      <div class="pub-info-grid">
+        <div class="pub-info-item"><span class="pub-info-label">Tipo</span><span class="pub-info-value">${esc(tipos)}</span></div>
+        <div class="pub-info-item"><span class="pub-info-label">Prioridade</span><span class="pub-info-value">${pBadge(p.priority)}</span></div>
+        <div class="pub-info-item"><span class="pub-info-label">Responsável</span><span class="pub-info-value">${p.resp||'—'}</span></div>
+        <div class="pub-info-item"><span class="pub-info-label">Solicitado por</span><span class="pub-info-value">${esc(p.requester||'—')}</span></div>
+        <div class="pub-info-item"><span class="pub-info-label">Data Estimada</span><span class="pub-info-value">${fmtD(p.endDate)}</span></div>
+        <div class="pub-info-item"><span class="pub-info-label">Data Real</span><span class="pub-info-value">${fmtD(p.endDateReal)||'—'}</span></div>
+      </div>
+      ${p.setores&&p.setores.length?`<div style="margin-top:14px;"><span class="pub-info-label">Setor</span><div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">${setH}</div></div>`:''}
+      ${p.description?`<div style="margin-top:14px;border-top:1px solid var(--g2);padding-top:14px;"><span class="pub-info-label">Descrição</span><div style="font-size:13px;color:var(--wh);line-height:1.7;margin-top:6px;">${esc(p.description)}</div></div>`:''}
+    </div>
+    <div class="pub-card">
+      <div class="pub-card-title">📋 Atualizações do Projeto</div>
+      ${tlHtml}
+    </div>
+    <div style="text-align:center;padding:20px;color:var(--g5);font-size:11px;">
+      Gerado por Independent Brazil · Inteligência &amp; Projetos
+    </div>`;
+}
+
+// ── SHARE LINK MANAGEMENT (admin/colab only) ──
+window.openShare = async(id)=>{
+  if(role==='ceo') return;
+  const p = projects.find(x=>x.id===id);
+  if(!p) return;
+  const body = document.getElementById('shareBody');
+  const baseUrl = window.location.origin + window.location.pathname;
+  const hasLink = p.shareToken && p.shareActive;
+  const shareUrl = hasLink ? `${baseUrl}?view=${p.shareToken}` : '';
+
+  if(hasLink){
+    body.innerHTML=`
+      <div class="share-status"><div class="share-dot on"></div><span style="color:var(--grn);font-weight:600;">Link ativo</span></div>
+      <div style="font-size:13px;color:var(--g5);margin-bottom:12px;">Compartilhe o link abaixo com o solicitante. Ele precisará da senha para acessar.</div>
+      <div class="share-link-box">
+        <span class="share-link-url">${shareUrl}</span>
+        <button class="btn-copy" onclick="copyLink('${shareUrl}')">Copiar</button>
+      </div>
+      <div style="background:var(--g2);border-radius:8px;padding:10px 14px;font-size:12px;margin:10px 0;">
+        🔑 Senha: <strong style="color:var(--wh);font-family:monospace;">${p.sharePassword||'—'}</strong>
+        <button onclick="copyLink('${p.sharePassword||''}')" style="margin-left:8px;padding:3px 8px;background:var(--g3);border:none;color:var(--g5);border-radius:5px;font-size:11px;cursor:pointer;">Copiar senha</button>
+      </div>
+      <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--g2);">
+        <div style="font-size:12px;color:var(--g5);margin-bottom:10px;">⚠️ Revogar o link impede qualquer acesso imediato.</div>
+        <button class="btn-revoke" onclick="revokeShare('${id}')">🚫 Parar visualização / Cancelar link</button>
+      </div>`;
+  } else {
+    body.innerHTML=`
+      <div class="share-status"><div class="share-dot off"></div><span style="color:var(--g5);">Nenhum link ativo</span></div>
+      <div style="font-size:13px;color:var(--g5);margin-bottom:18px;">Gere um link com senha para compartilhar o andamento deste projeto com o solicitante.</div>
+      <div class="fg2"><label>Senha de acesso</label>
+        <input type="text" id="sharePwd" placeholder="Ex: atualiza2025" style="width:100%;padding:10px 13px;background:var(--g2);border:1px solid var(--g3);border-radius:8px;color:var(--wh);font-family:var(--fb);font-size:13px;outline:none;"/>
+        <div style="font-size:11px;color:var(--g5);margin-top:5px;">O solicitante precisará desta senha para abrir o link.</div>
+      </div>
+      <div class="ma" style="margin-top:16px;padding-top:16px;">
+        <button class="bs2" onclick="CM('mShare')">Cancelar</button>
+        <button class="bsv" onclick="generateShare('${id}')">🔗 Gerar Link</button>
+      </div>`;
+  }
+  OM('mShare');
+};
+
+window.generateShare = async(id)=>{
+  const pwd = document.getElementById('sharePwd').value.trim();
+  if(!pwd){toast('Digite uma senha para o link.','err');return;}
+  const token = Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2);
+  try{
+    await updateDoc(doc(db,'projects',id),{shareToken:token,sharePassword:pwd,shareActive:true,shareCreatedAt:new Date().toISOString(),shareCreatedBy:uname});
+    toast('Link gerado!','ok');
+    await loadP();
+    CM('mShare');
+    openShare(id);
+  }catch(e){toast('Erro: '+e.message,'err');}
+};
+
+window.revokeShare = async(id)=>{
+  if(!confirm('Revogar o link? O solicitante não conseguirá mais acessar.')) return;
+  try{
+    await updateDoc(doc(db,'projects',id),{shareActive:false});
+    toast('Link revogado.','ok');
+    await loadP();
+    CM('mShare');
+  }catch(e){toast('Erro: '+e.message,'err');}
+};
+
+window.copyLink = (text)=>{
+  navigator.clipboard.writeText(text).then(()=>toast('Copiado!','ok')).catch(()=>{
+    const el=document.createElement('textarea');el.value=text;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);toast('Copiado!','ok');
+  });
+};
+
 </script>
+
+<!-- MODAL SHARE LINK -->
+<div class="mo" id="mShare">
+  <div class="md md-sm">
+    <div class="mh"><div class="mt2" id="mShareTitle">🔗 Link de Atualização</div><button class="bc" onclick="CM('mShare')">✕</button></div>
+    <div id="shareBody"></div>
+  </div>
+</div>
+
+<!-- PUBLIC VIEW PAGE (shown when ?update=TOKEN in URL) -->
+<div id="publicView" style="display:none;min-height:100vh;background:var(--bk);padding:32px 24px;max-width:760px;margin:0 auto;">
+  <div id="pvContent"></div>
+</div>
+
+<!-- MODAL SHARE LINK -->
+<div class="mo" id="mShare">
+  <div class="md md-sm">
+    <div class="mh"><div class="mt2">🔗 Link de Atualização</div><button class="bc" onclick="CM('mShare')">✕</button></div>
+    <div id="shareBody"></div>
+  </div>
+</div>
+
+<!-- PUBLIC VIEW PAGE -->
+<div id="pubView" style="display:none;min-height:100vh;background:var(--bk);">
+  <div style="max-width:720px;margin:0 auto;padding:40px 24px;">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--g2);">
+      <img src="data:image/png;base64,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" style="width:44px;height:44px;border-radius:9px;" alt="IB"/>
+      <div>
+        <div style="font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g5);">Independent Brazil — Atualização de Projeto</div>
+      </div>
+    </div>
+    <div id="pubContent"></div>
+  </div>
+</div>
+
+<!-- MODAL SENHA PUBLICA -->
+<div id="pubPwdScreen" style="display:none;min-height:100vh;background:var(--bk);align-items:center;justify-content:center;">
+  <div style="width:380px;padding:44px;background:var(--g1);border:1px solid var(--g2);border-radius:16px;text-align:center;">
+    <img src="data:image/png;base64,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" style="width:52px;height:52px;border-radius:10px;margin-bottom:20px;" alt="IB"/>
+    <div style="font-family:var(--fd);font-size:20px;font-weight:800;margin-bottom:6px;">Acesso ao Projeto</div>
+    <div style="font-size:13px;color:var(--g5);margin-bottom:24px;">Digite a senha para visualizar as atualizações</div>
+    <input type="password" id="pubPwdInput" placeholder="Senha de acesso" style="width:100%;padding:11px 14px;background:var(--g2);border:1px solid var(--g3);border-radius:8px;color:var(--wh);font-family:var(--fb);font-size:14px;outline:none;margin-bottom:10px;"/>
+    <div id="pubPwdErr" style="color:var(--red);font-size:12px;margin-bottom:10px;display:none;">Senha incorreta.</div>
+    <button onclick="checkPubPwd()" style="width:100%;padding:12px;background:#fff;color:#000;border:none;border-radius:8px;font-family:var(--fd);font-size:14px;font-weight:700;cursor:pointer;">Entrar</button>
+  </div>
+</div>
 </body>
 </html>
