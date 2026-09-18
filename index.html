@@ -969,56 +969,50 @@ window.saveBlock=async(pid)=>{
   if(!text&&pendingFiles.length===0){toast("Adicione texto ou arquivo.","err");return;}
   const prog=document.getElementById("uploadProgress"),bar=document.getElementById("uploadBar");
   const saveBtn=document.querySelector(".bsv");
+  const resetBtn=()=>{if(saveBtn){saveBtn.disabled=false;saveBtn.textContent="💾 Salvar Bloco";}prog.style.display="none";};
   if(saveBtn){saveBtn.disabled=true;saveBtn.textContent="Salvando...";}
   prog.style.display="block";bar.style.width="0%";
   const media=[];
-  let uploadError=false;
   for(let i=0;i<pendingFiles.length;i++){
     const f=pendingFiles[i],isPdf=f.type==="application/pdf";
     const sRef=ref(storage,`studio/${pid}/${Date.now()}_${f.name}`);
+    const uploadPromise=new Promise((res,rej)=>{
+      const task=uploadBytesResumable(sRef,f);
+      task.on("state_changed",
+        snap=>{bar.style.width=Math.round((i/pendingFiles.length+snap.bytesTransferred/snap.totalBytes/pendingFiles.length)*100)+"%";},
+        err=>{console.error("Upload error:",err.code,err.message);rej(err);},
+        async()=>{
+          try{const url=await getDownloadURL(task.snapshot.ref);media.push({url,name:f.name,type:isPdf?"pdf":"image"});res();}
+          catch(e){rej(e);}
+        }
+      );
+    });
+    const timeoutPromise=new Promise((_,rej)=>setTimeout(()=>rej(new Error("TIMEOUT")),20000));
     try{
-      await new Promise((res,rej)=>{
-        const task=uploadBytesResumable(sRef,f);
-        task.on("state_changed",
-          snap=>{bar.style.width=Math.round((i/pendingFiles.length+snap.bytesTransferred/snap.totalBytes/pendingFiles.length)*100)+"%";},
-          err=>{
-            console.error("Upload error:",err.code,err.message);
-            rej(err);
-          },
-          async()=>{
-            try{const url=await getDownloadURL(task.snapshot.ref);media.push({url,name:f.name,type:isPdf?"pdf":"image"});res();}
-            catch(e){rej(e);}
-          }
-        );
-      });
+      await Promise.race([uploadPromise,timeoutPromise]);
     }catch(e){
-      uploadError=true;
-      prog.style.display="none";
-      if(saveBtn){saveBtn.disabled=false;saveBtn.textContent="💾 Salvar Bloco";}
-      if(e.code==="storage/unauthorized"||e.code==="storage/unauthenticated"){
-        toast("❌ Sem permissão no Storage. Verifique as regras do Firebase Storage.","err");
-      }else if(e.code==="storage/unknown"||!e.code){
-        toast("❌ Firebase Storage não está ativado. Ative em console.firebase.google.com → Storage.","err");
+      resetBtn();
+      if(e.message==="TIMEOUT"){
+        toast("❌ Upload travou. Firebase Storage pode não estar ativado. Acesse console.firebase.google.com → Storage e ative.","err");
+      }else if(e.code==="storage/unauthorized"||e.code==="storage/unauthenticated"){
+        toast("❌ Sem permissão no Storage. Aplique as regras em Firebase Console → Storage → Rules.","err");
       }else{
-        toast("❌ Erro upload '"+f.name+"': "+e.message,"err");
+        toast("❌ Erro no upload de '"+f.name+"': "+(e.code||e.message),"err");
       }
       console.error("Upload falhou:",e);
       return;
     }
   }
-  if(uploadError)return;
   bar.style.width="100%";
   try{
     await addDoc(collection(db,"projects",pid,"blocks"),{title,text,media,author:uname,email:CU.email,createdAt:serverTimestamp()});
-    toast("Bloco salvo! ✓","ok");clearBlockForm();prog.style.display="none";
-    if(saveBtn){saveBtn.disabled=false;saveBtn.textContent="💾 Salvar Bloco";}
+    toast("Bloco salvo! ✓","ok");clearBlockForm();resetBtn();
     const bSnap=await getDocs(query(collection(db,"projects",pid,"blocks"),orderBy("createdAt","asc")));
     const blocks=bSnap.docs.map(d=>({id:d.id,...d.data()}));
     renderStudio(projects.find(x=>x.id===pid),blocks);
   }catch(e){
     toast("Erro ao salvar bloco: "+e.message,"err");
-    prog.style.display="none";
-    if(saveBtn){saveBtn.disabled=false;saveBtn.textContent="💾 Salvar Bloco";}
+    resetBtn();
   }
 };
 window.delBlock=async(pid,bid)=>{
